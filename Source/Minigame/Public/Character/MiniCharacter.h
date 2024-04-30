@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Character/MiniCharacterBase.h"
+#include "Components/WidgetComponent.h"
 #include "MiniCharacter.generated.h"
+
 
 UENUM(BlueprintType)
 enum class EMovementState : uint8
@@ -24,14 +26,21 @@ class MINIGAME_API AMiniCharacter : public AMiniCharacterBase
 
 public:
 	AMiniCharacter();
-
+	
 	UPROPERTY(BlueprintReadOnly)
 	EMovementState MovementState;
 
 	UFUNCTION(BlueprintCallable)
 	void UpdateMovementState();
+	
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void OnRep_PlayerState() override;
 
-// protected:
-// 		virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-// 	
+	
+private:
+	void InitAbilityActorInfo();
+
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UWidgetComponent> Healthbar;
 };

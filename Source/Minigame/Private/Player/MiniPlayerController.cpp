@@ -19,8 +19,10 @@ void AMiniPlayerController::BeginPlay()
 	check(MiniContext);
 
 	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
-	check(Subsystem);
-	Subsystem->AddMappingContext(MiniContext, 0);
+	if (Subsystem)
+	{
+		Subsystem->AddMappingContext(MiniContext, 0);
+	}
 
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;

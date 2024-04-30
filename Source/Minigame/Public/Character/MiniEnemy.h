@@ -13,5 +13,9 @@ UCLASS()
 class MINIGAME_API AMiniEnemy : public AMiniCharacterBase
 {
 	GENERATED_BODY()
-	
+
+	AMiniEnemy();
+
+protected:
+	virtual void BeginPlay() override;
 };

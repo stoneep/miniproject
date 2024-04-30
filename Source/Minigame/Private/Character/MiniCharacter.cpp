@@ -3,9 +3,12 @@
 
 #include "Character/MiniCharacter.h"
 
+#include "AbilitySystemComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Player/MiniPlayerState.h"
+#include "UI/Widget/MiniUserWidget.h"
 
- AMiniCharacter::AMiniCharacter()
+AMiniCharacter::AMiniCharacter()
  {
  	GetCharacterMovement()->bOrientRotationToMovement = false;
  	//GetCharacterMovement()->RotationRate = FRotatpr;
@@ -17,6 +20,14 @@
  	bUseControllerRotationYaw = false;
 
  	MovementState = EMovementState::Idle;
+
+	Healthbar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
+	Healthbar->SetupAttachment(GetRootComponent());
+
+	if(UMiniUserWidget* MiniUserWidget = Cast<UMiniUserWidget>(Healthbar->GetUserWidgetObject()))
+	{
+		MiniUserWidget->SetWidgetController(this);
+	}
  }
 
 void AMiniCharacter::UpdateMovementState()
@@ -32,8 +43,30 @@ void AMiniCharacter::UpdateMovementState()
  	
 }
 
-// void AMiniCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-// {
-// 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-//  	
-// }
+void AMiniCharacter::PossessedBy(AController* NewController)
+{
+ 	Super::PossessedBy(NewController);
+
+ 	// Init ability actor info for the Server
+ 	InitAbilityActorInfo();
+}
+
+void AMiniCharacter::OnRep_PlayerState()
+{
+ 	Super::OnRep_PlayerState();
+
+ 	// Init ability actor info for the Client
+ 	InitAbilityActorInfo();
+}
+
+void AMiniCharacter::InitAbilityActorInfo()
+{
+ 	AMiniPlayerState* MiniPlayerState = GetPlayerState<AMiniPlayerState>();
+ 	check(MiniPlayerState);
+ 	MiniPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(MiniPlayerState, this);
+ 	AbilitySystemComponent = MiniPlayerState->GetAbilitySystemComponent();
+ 	AttributeSet = MiniPlayerState->GetAttributeSet();
+
+	
+}
+

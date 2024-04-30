@@ -10,6 +10,11 @@ AMiniCharacterBase::AMiniCharacterBase()
 
 }
 
+UAbilitySystemComponent* AMiniCharacterBase::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
 
 void AMiniCharacterBase::BeginPlay()
 {
