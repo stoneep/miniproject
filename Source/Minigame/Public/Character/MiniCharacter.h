@@ -40,7 +40,7 @@ public:
 private:
 	void InitAbilityActorInfo();
 
-// protected:
-// 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-// 	TObjectPtr<UWidgetComponent> Healthbar;
+ protected:
+ 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+ 	TObjectPtr<UWidgetComponent> Healthbar;
 };

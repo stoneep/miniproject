@@ -14,3 +14,7 @@ void UMiniWidgetController::SetWidgetControllerParams(const FWidgetControllerPar
 void UMiniWidgetController::BroadcastInitialValues()
 {
 }
+
+void UMiniWidgetController::BindCallbacksToDependencies()
+{
+}
