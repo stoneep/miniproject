@@ -5,8 +5,10 @@
 #include "CoreMinimal.h"
 #include "Character/MiniCharacterBase.h"
 #include "Components/WidgetComponent.h"
+#include "UI/WidgetController/OverlayWidgetController.h"
 #include "MiniCharacter.generated.h"
 
+class UWidgetComponent;
 
 UENUM(BlueprintType)
 enum class EMovementState : uint8
@@ -14,7 +16,6 @@ enum class EMovementState : uint8
 	Idle,
 	Moving
 };
-
 
 /**
  * 
@@ -35,12 +36,11 @@ public:
 	
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
-
 	
 private:
 	void InitAbilityActorInfo();
 
-protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<UWidgetComponent> Healthbar;
+// protected:
+// 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+// 	TObjectPtr<UWidgetComponent> Healthbar;
 };

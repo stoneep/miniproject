@@ -4,14 +4,17 @@
 #include "Character/MiniCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/MiniAttributeSet.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Player/MiniPlayerController.h"
 #include "Player/MiniPlayerState.h"
+#include "UI/HUD/MiniHUD.h"
 #include "UI/Widget/MiniUserWidget.h"
 
 AMiniCharacter::AMiniCharacter()
  {
  	GetCharacterMovement()->bOrientRotationToMovement = false;
- 	//GetCharacterMovement()->RotationRate = FRotatpr;
+ 	//GetCharacterMovement()->RotationRate = FRotator;
  	GetCharacterMovement()->bConstrainToPlane = true;
  	GetCharacterMovement()->bSnapToPlaneAtStart = true;
  	
@@ -21,13 +24,13 @@ AMiniCharacter::AMiniCharacter()
 
  	MovementState = EMovementState::Idle;
 
-	Healthbar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
-	Healthbar->SetupAttachment(GetRootComponent());
-
-	if(UMiniUserWidget* MiniUserWidget = Cast<UMiniUserWidget>(Healthbar->GetUserWidgetObject()))
-	{
-		MiniUserWidget->SetWidgetController(this);
-	}
+	// Healthbar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
+	// Healthbar->SetupAttachment(GetRootComponent());
+	//
+	// if(UMiniUserWidget* MiniUserWidget = Cast<UMiniUserWidget>(Healthbar->GetUserWidgetObject()))
+	 //{
+	 //	MiniUserWidget->SetWidgetController(this);
+	//}
  }
 
 void AMiniCharacter::UpdateMovementState()
@@ -67,6 +70,13 @@ void AMiniCharacter::InitAbilityActorInfo()
  	AbilitySystemComponent = MiniPlayerState->GetAbilitySystemComponent();
  	AttributeSet = MiniPlayerState->GetAttributeSet();
 
+	if (AMiniPlayerController* MiniPlayerController = Cast<AMiniPlayerController>(GetController()))
+	{
+		if (AMiniHUD* MiniHUD = Cast<AMiniHUD>(MiniPlayerController->GetHUD()))
+		{
+			MiniHUD->InitOverlay(MiniPlayerController, MiniPlayerState, AbilitySystemComponent, AttributeSet);
+		}
+	}
 	
 }
 
