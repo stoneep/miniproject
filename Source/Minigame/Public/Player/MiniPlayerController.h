@@ -9,7 +9,7 @@
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
-
+class IEnemyInterface;
 /**
  * 
  */
@@ -20,7 +20,7 @@ class MINIGAME_API AMiniPlayerController : public APlayerController
 
 public:
 	AMiniPlayerController();
-	
+	virtual void PlayerTick(float DeltaTime) override;
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;

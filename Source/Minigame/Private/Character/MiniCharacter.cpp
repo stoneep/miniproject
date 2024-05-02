@@ -4,8 +4,10 @@
 #include "Character/MiniCharacter.h"
 
 #include "AbilitySystemComponent.h"
-#include "AbilitySystem/MiniAttributeSet.h"
+#include "AbilitySystem/MiniAbilitySystemComponent.h"
+//#include "AbilitySystem/MiniAttributeSet.h"
 #include "GameFramework/CharacterMovementComponent.h"
+//#include "AbilitySystem/MiniAbilitySystemComponent.h"
 #include "Player/MiniPlayerController.h"
 #include "Player/MiniPlayerState.h"
 #include "UI/HUD/MiniHUD.h"
@@ -33,6 +35,14 @@ AMiniCharacter::AMiniCharacter()
 	}
  }
 
+void AMiniCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	// Init ability actor info for the Server
+	InitAbilityActorInfo();
+}
+
 void AMiniCharacter::UpdateMovementState()
 {
  	if (GetVelocity().SizeSquared() > 0.f)
@@ -46,13 +56,6 @@ void AMiniCharacter::UpdateMovementState()
  	
 }
 
-void AMiniCharacter::PossessedBy(AController* NewController)
-{
- 	Super::PossessedBy(NewController);
-
- 	// Init ability actor info for the Server
- 	InitAbilityActorInfo();
-}
 
 void AMiniCharacter::OnRep_PlayerState()
 {
@@ -62,11 +65,19 @@ void AMiniCharacter::OnRep_PlayerState()
  	InitAbilityActorInfo();
 }
 
+int32 AMiniCharacter::GetPlayerLevel()
+{
+	const AMiniPlayerState* MiniPlayerState = GetPlayerState<AMiniPlayerState>();
+	check(MiniPlayerState);
+	return MiniPlayerState->GetPlayerLevel();
+}
+
 void AMiniCharacter::InitAbilityActorInfo()
 {
  	AMiniPlayerState* MiniPlayerState = GetPlayerState<AMiniPlayerState>();
  	check(MiniPlayerState);
  	MiniPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(MiniPlayerState, this);
+	Cast<UMiniAbilitySystemComponent>(MiniPlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
  	AbilitySystemComponent = MiniPlayerState->GetAbilitySystemComponent();
  	AttributeSet = MiniPlayerState->GetAttributeSet();
 
@@ -77,6 +88,6 @@ void AMiniCharacter::InitAbilityActorInfo()
 			MiniHUD->InitOverlay(MiniPlayerController, MiniPlayerState, AbilitySystemComponent, AttributeSet);
 		}
 	}
-	
+	InitializeDefaultAttributes();
 }
 

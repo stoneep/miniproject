@@ -26,19 +26,22 @@ class MINIGAME_API AMiniCharacter : public AMiniCharacterBase
 	GENERATED_BODY()
 
 public:
+
 	AMiniCharacter();
+	
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void OnRep_PlayerState() override;
+
+	virtual int32 GetPlayerLevel() override;
 	
 	UPROPERTY(BlueprintReadOnly)
 	EMovementState MovementState;
 
 	UFUNCTION(BlueprintCallable)
 	void UpdateMovementState();
-	
-	virtual void PossessedBy(AController* NewController) override;
-	virtual void OnRep_PlayerState() override;
-	
+
 private:
-	void InitAbilityActorInfo();
+	virtual void InitAbilityActorInfo() override;
 
  protected:
  	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

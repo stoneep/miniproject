@@ -12,6 +12,11 @@ AMiniPlayerController::AMiniPlayerController()
 	bReplicates = true;
 }
 
+void AMiniPlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+}
+
 void AMiniPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
