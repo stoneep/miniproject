@@ -31,7 +31,7 @@ void FMiniGameplayTags::InitializeNativeGameplayTags()
 					FString("CriticalDMG"));
 	GameplayTags.Attributes_Primary_Healing = UGameplayTagsManager::Get().AddNativeGameplayTag(
 						FName("Attributes.Primary.Healing"),
-						FString("OutDoorSTRSetting"));
+						FString("Healing"));
 	
 	GameplayTags.Attributes_Secondary_OutdoorCombatPower = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Secondary.OutdoorCombatPower"),
