@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "GameplayEffectExtension.h"
 #include "Net/UnrealNetwork.h"
+#include "MiniGameplayTags.h"
 
 UMiniAttributeSet::UMiniAttributeSet()
 {
@@ -14,6 +15,25 @@ UMiniAttributeSet::UMiniAttributeSet()
 	//InitMaxHealth(100.f);
 	//InitMana(10.f);
 	//InitMaxMana(50.f);
+
+	const FMiniGameplayTags& GameplayTags = FMiniGameplayTags::Get();
+	/*Primary Attributes*/
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_ATK, GetATKAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_DEF, GetDEFAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_HIT, GetHITAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Dodge, GetDodgeAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Block, GetBlockAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Crit, GetCritAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_CritDMG, GetCritDMGAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Healing, GetHealingAttribute);
+
+
+	/*Secondary Attributes*/
+	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_OutdoorCombatPower, GetOutdoorCombatPowerAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_IndoorCombatPower, GetIndoorCombatPowerAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_StreetCombatPower, GetStreetCombatPowerAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_MaxHealth, GetMaxHealthAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_MaxMana, GetMaxManaAttribute);
 }
 
 void UMiniAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

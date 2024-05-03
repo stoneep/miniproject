@@ -6,7 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "UI/WidgetController/OverlayWidgetController.h"
 #include "MiniAbilitySystemLibrary.generated.h"
-
+class UAttributeMenuWidgetController;
 class UOverlayWidgetController;
 /**
  * 
@@ -18,6 +18,9 @@ class MINIGAME_API UMiniAbilitySystemLibrary : public UBlueprintFunctionLibrary
 
 public:
 
-	UPROPERTY(BlueprintPure, Category="MiniAbilitySystemLibrary|WidgetController")
+	UFUNCTION(BlueprintPure, Category="MiniAbilitySystemLibrary|WidgetController")
 	static UOverlayWidgetController* GetOverlayWidgetController(const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintPure, Category="MiniAbilitySystemLibrary|WidgetController")
+	static UAttributeMenuWidgetController* GetAttributeMenuWidgetController(const UObject* WorldContextObject);
 };
