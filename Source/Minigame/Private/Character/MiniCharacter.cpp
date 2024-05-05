@@ -26,13 +26,13 @@ AMiniCharacter::AMiniCharacter()
 
  	MovementState = EMovementState::Idle;
 
-	 Healthbar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
-	 Healthbar->SetupAttachment(GetRootComponent());
-	
-	 if(UMiniUserWidget* MiniUserWidget = Cast<UMiniUserWidget>(Healthbar->GetUserWidgetObject()))
-	 {
-	 	MiniUserWidget->SetWidgetController(this);
-	}
+	//  Healthbar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
+	//  Healthbar->SetupAttachment(GetRootComponent());
+	//
+	//  if(UMiniUserWidget* MiniUserWidget = Cast<UMiniUserWidget>(Healthbar->GetUserWidgetObject()))
+	//  {
+	//  	MiniUserWidget->SetWidgetController(this);
+	// }
  }
 
 void AMiniCharacter::PossessedBy(AController* NewController)
