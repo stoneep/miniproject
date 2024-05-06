@@ -3,6 +3,7 @@
 
 #include "Character/MiniCharacterBase.h"
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/MiniAbilitySystemComponent.h"
 
 AMiniCharacterBase::AMiniCharacterBase()
 {
@@ -45,6 +46,14 @@ void AMiniCharacterBase::InitializeDefaultAttributes() const
 	ApplyEffectToSelf(DefaultPrimaryAttributes, 1.f);
 	ApplyEffectToSelf(DefaultSecondaryAttributes, 1.f);
 	ApplyEffectToSelf(DefaultVitalAttributes, 1.f);
+}
+
+void AMiniCharacterBase::AddCharacterAbilities()
+{
+	UMiniAbilitySystemComponent* MiniASC = CastChecked<UMiniAbilitySystemComponent>(AbilitySystemComponent);
+	if (!HasAuthority()) return;
+
+	MiniASC->AddCharacterAbilities(StartupAbilities);
 }
 
 

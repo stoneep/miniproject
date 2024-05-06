@@ -5,7 +5,7 @@
 
 #include "AbilitySystem/MiniAbilitySystemComponent.h"
 #include "AbilitySystem/MiniAttributeSet.h"
-//#include "Minigame/Minigame.h"
+#include "Minigame/Minigame.h"
 
 AMiniEnemy::AMiniEnemy()
 {
@@ -25,6 +25,17 @@ void AMiniEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	InitAbilityActorInfo();
+}
+
+void AMiniEnemy::HighlightActor()
+{
+	GetMesh()->SetRenderCustomDepth(true);
+	GetMesh()->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
+}
+
+void AMiniEnemy::UnHighlightActor()
+{
+	GetMesh()->SetRenderCustomDepth(false);
 }
 
 void AMiniEnemy::InitAbilityActorInfo()

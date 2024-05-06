@@ -32,7 +32,9 @@ void FMiniGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Attributes_Primary_Healing = UGameplayTagsManager::Get().AddNativeGameplayTag(
 						FName("Attributes.Primary.Healing"),
 						FString("Healing"));
+
 	
+	//
 	GameplayTags.Attributes_Secondary_OutdoorCombatPower = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Secondary.OutdoorCombatPower"),
 		FString("OutDoorSTR"));
@@ -48,4 +50,27 @@ void FMiniGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Attributes_Secondary_MaxMana = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Secondary.MaxMana"),
 		FString("MaxMana"));
+
+	/*
+	 * InputTags
+	 */
+	
+	GameplayTags.InputTag_LMB = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.LMB"),
+			FString("LMB"));
+	GameplayTags.InputTag_RMB = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.RMB"),
+			FString("RMB"));
+	GameplayTags.InputTag_1 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.1"),
+			FString("Key 1"));
+	GameplayTags.InputTag_2 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.2"),
+			FString("Key 2"));
+	GameplayTags.InputTag_LMB = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.3"),
+			FString("Key 3"));
+	GameplayTags.InputTag_4 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.4"),
+			FString("Key 4"));
 }
