@@ -4,10 +4,14 @@
 #include "Character/MiniCharacterBase.h"
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/MiniAbilitySystemComponent.h"
+#include "Components/CapsuleComponent.h"
 
 AMiniCharacterBase::AMiniCharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
+	
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
 	Weapon->SetupAttachment(GetMesh(), FName("WeaponHandSocket"));

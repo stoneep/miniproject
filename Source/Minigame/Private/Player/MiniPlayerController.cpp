@@ -117,6 +117,8 @@ void AMiniPlayerController::SetupInputComponent()
 	UMiniInputComponent* MiniInputComponent = CastChecked<UMiniInputComponent>(InputComponent);
 
 	MiniInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AMiniPlayerController::Move);
+	MiniInputComponent->BindAction(ShiftAction, ETriggerEvent::Started, this, &AMiniPlayerController::ShiftPressed);
+	MiniInputComponent->BindAction(ShiftAction, ETriggerEvent::Completed, this, &AMiniPlayerController::ShiftReleased);
 	MiniInputComponent->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 	
 	
@@ -140,10 +142,16 @@ void AMiniPlayerController::Move(const FInputActionValue& InputActionValue)
 
 void AMiniPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
-	if (InputTag.MatchesTagExact(FMiniGameplayTags::Get().InputTag_LMB))
+	if (!InputTag.MatchesTagExact(FMiniGameplayTags::Get().InputTag_LMB))
 	{
-		bTargeting = ThisActor ? true : false;
-		bAutoRunning = false;
+		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
+		return;
+	}
+	if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
+
+	if (bTargeting)
+	{
+		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
 	}
 }
 
