@@ -26,6 +26,12 @@ void AMiniCharacterBase::BeginPlay()
 	
 }
 
+FVector AMiniCharacterBase::GetCombatSocketLocation()
+{
+	check(Weapon);
+	return Weapon->GetSocketLocation(WeaponTipSocketName);
+}
+
 void AMiniCharacterBase::InitAbilityActorInfo()
 {
 }
