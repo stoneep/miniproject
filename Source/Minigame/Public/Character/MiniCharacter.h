@@ -45,7 +45,7 @@ public:
 private:
 	virtual void InitAbilityActorInfo() override;
 
- protected:
- 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
- 	TObjectPtr<UWidgetComponent> Healthbar;
+ // protected:
+ // 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+ // 	TObjectPtr<UWidgetComponent> Healthbar;
 };
