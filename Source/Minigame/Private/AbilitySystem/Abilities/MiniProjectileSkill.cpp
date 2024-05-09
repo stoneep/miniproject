@@ -18,7 +18,7 @@ void UMiniProjectileSkill::SpawnProjectile(const FVector& ProjectileTargetLocati
 {
 	const bool bIsServer = GetAvatarActorFromActorInfo()->HasAuthority();
 	if (!bIsServer) return;
-
+	
 	ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo());
 	if (CombatInterface)
 	{

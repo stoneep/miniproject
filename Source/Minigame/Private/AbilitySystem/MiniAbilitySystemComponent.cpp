@@ -8,7 +8,7 @@
 
 void UMiniAbilitySystemComponent::AbilityActorInfoSet()
 {
-	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UMiniAbilitySystemComponent::EffectApplied);
+	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UMiniAbilitySystemComponent::ClientEffectApplied);
 }
 
 void UMiniAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities)
@@ -20,7 +20,6 @@ void UMiniAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf
 		{
 			AbilitySpec.DynamicAbilityTags.AddTag(MiniAbility->StartupInputTag);
 			GiveAbility(AbilitySpec);
-			
 		}
 	}
 }
@@ -28,7 +27,6 @@ void UMiniAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf
 void UMiniAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag)
 {
 	if (!InputTag.IsValid()) return;
-
 	for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
 	{
 		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
@@ -45,7 +43,6 @@ void UMiniAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputT
 void UMiniAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& InputTag)
 {
 	if (!InputTag.IsValid()) return;
-
 	for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
 	{
 		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
@@ -55,8 +52,7 @@ void UMiniAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& In
 	}
 }
 
-void UMiniAbilitySystemComponent::EffectApplied_Implementation(UAbilitySystemComponent* AbilitySystemComponent,
-	const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle)
+void UMiniAbilitySystemComponent::ClientEffectApplied_Implementation(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle)
 {
 	FGameplayTagContainer TagContainer;
 	EffectSpec.GetAllAssetTags(TagContainer);

@@ -14,7 +14,6 @@ AMiniProjectile::AMiniProjectile()
 {
 	PrimaryActorTick.bCanEverTick = false;
 	bReplicates = true;
-	
 	Sphere = CreateDefaultSubobject<USphereComponent>("Sphere");
 	SetRootComponent(Sphere);
 	Sphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
@@ -22,7 +21,6 @@ AMiniProjectile::AMiniProjectile()
 	Sphere->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Overlap);
 	Sphere->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Overlap);
 	Sphere->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
-
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMovement");
 	ProjectileMovement->InitialSpeed = 550.f;
 	ProjectileMovement->MaxSpeed = 550.f;
@@ -54,8 +52,9 @@ void AMiniProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, 
 {
 	UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation(), FRotator::ZeroRotator);
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect, GetActorLocation());
+	LoopingSoundComponent->Stop();
 
-	if(HasAuthority())
+	if (HasAuthority())
 	{
 		Destroy();
 	}

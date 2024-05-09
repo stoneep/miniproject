@@ -42,7 +42,7 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UNiagaraSystem> ImpactEffect;
-	
+
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<USoundBase> ImpactSound;
 
