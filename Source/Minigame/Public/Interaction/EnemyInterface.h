@@ -22,6 +22,6 @@ class MINIGAME_API IEnemyInterface
 
 public:
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
-	virtual void HighlightActor() = 0;
-	virtual void UnHighlightActor() = 0;
+	virtual void HighlightActor();
+	virtual void UnHighlightActor();
 };
