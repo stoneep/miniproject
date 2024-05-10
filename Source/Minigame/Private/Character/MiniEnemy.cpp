@@ -5,7 +5,9 @@
 
 #include "AbilitySystem/MiniAbilitySystemComponent.h"
 #include "AbilitySystem/MiniAttributeSet.h"
+#include "Components/WidgetComponent.h"
 #include "Minigame/Minigame.h"
+#include "UI/Widget/MiniUserWidget.h"
 
 AMiniEnemy::AMiniEnemy()
 {
@@ -14,6 +16,8 @@ AMiniEnemy::AMiniEnemy()
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 	AttributeSet = CreateDefaultSubobject<UMiniAttributeSet>("AttributeSet");
+	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
+	HealthBar->SetupAttachment(GetRootComponent());
 }
 
 int32 AMiniEnemy::GetPlayerLevel()
@@ -25,6 +29,28 @@ void AMiniEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	InitAbilityActorInfo();
+	if (UMiniUserWidget* MiniUserWidget = Cast<UMiniUserWidget>(HealthBar->GetUserWidgetObject()))
+	{
+		MiniUserWidget->SetWidgetController(this);
+	}
+
+	if (const UMiniAttributeSet* MiniAS = Cast<UMiniAttributeSet>(AttributeSet))
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(MiniAS->GetHealthAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData& Data)
+			{
+				OnHealthChanged.Broadcast(Data.NewValue);
+			}
+		);
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(MiniAS->GetMaxHealthAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData& Data)
+			{
+				OnMaxHealthChanged.Broadcast(Data.NewValue);
+			}
+		);
+		OnHealthChanged.Broadcast(MiniAS->GetHealth());
+		OnMaxHealthChanged.Broadcast(MiniAS->GetMaxHealth());
+	}
 }
 
 void AMiniEnemy::HighlightActor()
