@@ -35,6 +35,11 @@ public:
 	virtual int32 GetPlayerLevel() override;
 
 	
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangedSignature OnHealthChanged;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangedSignature OnMaxHealthChanged;
 	
 	UPROPERTY(BlueprintReadOnly)
 	EMovementState MovementState;
@@ -45,7 +50,11 @@ public:
 private:
 	virtual void InitAbilityActorInfo() override;
 
- // protected:
- // 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
- // 	TObjectPtr<UWidgetComponent> Healthbar;
+	
+protected:
+
+	virtual void BeginPlay() override;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UWidgetComponent> HealthBar;
 };

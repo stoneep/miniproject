@@ -8,6 +8,7 @@
 //#include "AbilitySystem/MiniAttributeSet.h"
 #include "GameFramework/CharacterMovementComponent.h"
 //#include "AbilitySystem/MiniAbilitySystemComponent.h"
+#include "AbilitySystem/MiniAttributeSet.h"
 #include "Player/MiniPlayerController.h"
 #include "Player/MiniPlayerState.h"
 #include "UI/HUD/MiniHUD.h"
@@ -26,13 +27,8 @@ AMiniCharacter::AMiniCharacter()
 
  	MovementState = EMovementState::Idle;
 
-	//  Healthbar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
-	//  Healthbar->SetupAttachment(GetRootComponent());
-	//
-	//  if(UMiniUserWidget* MiniUserWidget = Cast<UMiniUserWidget>(Healthbar->GetUserWidgetObject()))
-	//  {
-	//  	MiniUserWidget->SetWidgetController(this);
-	// }
+	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
+	HealthBar->SetupAttachment(GetRootComponent());
  }
 
 void AMiniCharacter::PossessedBy(AController* NewController)
@@ -90,5 +86,34 @@ void AMiniCharacter::InitAbilityActorInfo()
 		}
 	}
 	InitializeDefaultAttributes();
+}
+
+void AMiniCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (UMiniUserWidget* MiniUserWidget = Cast<UMiniUserWidget>(HealthBar->GetUserWidgetObject()))
+	{
+		MiniUserWidget->SetWidgetController(this);
+	}
+
+	if (const UMiniAttributeSet* MiniAS = Cast<UMiniAttributeSet>(AttributeSet))
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(MiniAS->GetHealthAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData& Data)
+			{
+				OnHealthChanged.Broadcast(Data.NewValue);
+			}
+		);
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(MiniAS->GetMaxHealthAttribute()).AddLambda(
+			[this](const FOnAttributeChangeData& Data)
+			{
+				OnMaxHealthChanged.Broadcast(Data.NewValue);
+			}
+		);
+
+		OnHealthChanged.Broadcast(MiniAS->GetHealth());
+		OnMaxHealthChanged.Broadcast(MiniAS->GetMaxHealth());
+	}
 }
 
