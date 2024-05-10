@@ -8,7 +8,6 @@
 #include "MiniGameplayTags.h"
 #include "NavigationPath.h"
 #include "NavigationSystem.h"
-#include "NavigationSystem.h"
 #include "AbilitySystem/MiniAbilitySystemComponent.h"
 #include "Components/SplineComponent.h"
 #include "Interaction/EnemyInterface.h"

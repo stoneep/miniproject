@@ -7,6 +7,7 @@
 #include "MiniProjectileSkill.generated.h"
 
 class AMiniProjectile;
+class UGameplayEffect;
 /**
  * 
  */
@@ -25,5 +26,7 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<AMiniProjectile> ProjectileClass;
-
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<UGameplayEffect> DamageEffectClass;
 };
