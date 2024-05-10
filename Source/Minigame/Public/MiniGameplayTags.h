@@ -20,12 +20,18 @@ public:
 
 	FGameplayTag Attributes_Primary_ATK;
 	FGameplayTag Attributes_Primary_DEF;
-	FGameplayTag Attributes_Primary_Dodge;
-	FGameplayTag Attributes_Primary_HIT;
-	FGameplayTag Attributes_Primary_Block;
+	FGameplayTag Attributes_Primary_Stability;
+	FGameplayTag Attributes_Primary_Accuracy;
+	FGameplayTag Attributes_Primary_Evasion;
 	FGameplayTag Attributes_Primary_Crit;
 	FGameplayTag Attributes_Primary_CritDMG;
 	FGameplayTag Attributes_Primary_Healing;
+	FGameplayTag Attributes_Primary_NormalAttackRange;
+	FGameplayTag Attributes_Primary_CrowdControlRES;
+	FGameplayTag Attributes_Primary_CostRecovery;
+	FGameplayTag Attributes_Primary_CrowdControlPower;
+	FGameplayTag Attributes_Primary_RelationshipRank;
+	FGameplayTag Attributes_Primary_BonusRecipients;
 
 	
 	FGameplayTag Attributes_Secondary_MaxHealth;
@@ -40,7 +46,7 @@ public:
 	FGameplayTag InputTag_2;
 	FGameplayTag InputTag_3;
 	FGameplayTag InputTag_4;
-
+//1번
 private:
 	static FMiniGameplayTags GameplayTags;
 };

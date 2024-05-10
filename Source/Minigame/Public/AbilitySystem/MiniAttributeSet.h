@@ -71,7 +71,7 @@ public:
 	TMap<FGameplayTag, TStaticFuncPtr<FGameplayAttribute()>> TagsToAttributes;
 	
 	/*
-	 * Primary Attributes
+	 * Secondary STATUS Attributes
 	 */
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_StreetCombatPower, Category = "Secondary Attributes")
@@ -94,7 +94,7 @@ public:
 	FGameplayAttributeData MaxMana;
 	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, MaxMana);
 	/*
-	 * Vital STATUS Attributes
+	 * Primary STATUS Attributes
 	 */
 	
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ATK, Category = "Primary Attributes")
@@ -105,17 +105,17 @@ public:
 	FGameplayAttributeData DEF;
 	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, DEF);
 
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_HIT, Category = "Primary Attributes")
-	FGameplayAttributeData HIT;
-	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, HIT);
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Accuracy, Category = "Primary Attributes")
+	FGameplayAttributeData Accuracy;
+	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, Accuracy);
 
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Dodge, Category = "Primary Attributes")
-	FGameplayAttributeData Dodge;
-	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, Dodge);
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Evasion, Category = "Primary Attributes")
+	FGameplayAttributeData Evasion;
+	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, Evasion);
 
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Block, Category = "Primary Attributes")
-	FGameplayAttributeData Block;
-	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, Block);
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Stability, Category = "Primary Attributes")
+	FGameplayAttributeData Stability;
+	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, Stability);
 	
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Crit, Category = "Primary Attributes")
 	FGameplayAttributeData Crit;
@@ -129,7 +129,30 @@ public:
 	FGameplayAttributeData Healing;
 	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, Healing);
 
-//
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_NormalAttackRange, Category = "Primary Attributes")
+	FGameplayAttributeData NormalAttackRange;
+	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, NormalAttackRange);
+	
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CostRecovery, Category = "Primary Attributes")
+	FGameplayAttributeData CostRecovery;
+	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, CostRecovery);
+	
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CrowdControlRES, Category = "Primary Attributes")
+	FGameplayAttributeData CrowdControlRES;
+	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, CrowdControlRES);
+	
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CrowdControlPower, Category = "Primary Attributes")
+	FGameplayAttributeData CrowdControlPower;
+	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, CrowdControlPower);
+	
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_RelationshipRank, Category = "Primary Attributes")
+	FGameplayAttributeData RelationshipRank;
+	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, RelationshipRank);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_BonusRecipients, Category = "Primary Attributes")
+	FGameplayAttributeData BonusRecipients;
+	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, BonusRecipients);
+//3번
 	
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes")
 	FGameplayAttributeData Health;
@@ -176,18 +199,30 @@ public:
 	UFUNCTION()
 	void OnRep_DEF(const FGameplayAttributeData& OldDEF) const;
 	UFUNCTION()
-	void OnRep_HIT(const FGameplayAttributeData& OldHIT) const;
+	void OnRep_Accuracy(const FGameplayAttributeData& OldAccuracy) const;
 	UFUNCTION()
-	void OnRep_Dodge(const FGameplayAttributeData& OldDodge) const;
+	void OnRep_Stability(const FGameplayAttributeData& OldStability) const;
 	UFUNCTION()
-	void OnRep_Block(const FGameplayAttributeData& OldBlock) const;
+	void OnRep_Evasion(const FGameplayAttributeData& OldEvasion) const;
 	UFUNCTION()
 	void OnRep_Crit(const FGameplayAttributeData& OldCrit) const;
 	UFUNCTION()
 	void OnRep_CritDMG(const FGameplayAttributeData& OldCritDMG) const;
 	UFUNCTION()
 	void OnRep_Healing(const FGameplayAttributeData& OldHealing) const;
-	
+	UFUNCTION()
+	void OnRep_NormalAttackRange(const FGameplayAttributeData& OldNormalAttackRange) const;
+	UFUNCTION()
+	void OnRep_CrowdControlRES(const FGameplayAttributeData& OldCrowdControlRES) const;
+	UFUNCTION()
+	void OnRep_CostRecovery(const FGameplayAttributeData& OldCostRecovery) const;
+	UFUNCTION()
+	void OnRep_CrowdControlPower(const FGameplayAttributeData& OldCrowdControlPower) const;
+	UFUNCTION()
+	void OnRep_RelationshipRank(const FGameplayAttributeData& OldRelationshipRank) const;
+	UFUNCTION()
+	void OnRep_BonusRecipients(const FGameplayAttributeData& OldBonusRecipients) const;
+	//2번
 private:
 
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;

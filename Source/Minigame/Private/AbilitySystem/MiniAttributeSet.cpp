@@ -20,13 +20,19 @@ UMiniAttributeSet::UMiniAttributeSet()
 	/*Primary Attributes*/
 	TagsToAttributes.Add(GameplayTags.Attributes_Primary_ATK, GetATKAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_Primary_DEF, GetDEFAttribute);
-	TagsToAttributes.Add(GameplayTags.Attributes_Primary_HIT, GetHITAttribute);
-	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Dodge, GetDodgeAttribute);
-	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Block, GetBlockAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Accuracy, GetAccuracyAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Stability, GetStabilityAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Evasion, GetEvasionAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Crit, GetCritAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_Primary_CritDMG, GetCritDMGAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_Primary_Healing, GetHealingAttribute);
-
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_NormalAttackRange, GetNormalAttackRangeAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_CrowdControlRES, GetCrowdControlRESAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_CostRecovery, GetCostRecoveryAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_CrowdControlPower, GetCrowdControlPowerAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_RelationshipRank, GetRelationshipRankAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Primary_BonusRecipients, GetBonusRecipientsAttribute);
+//4번
 
 	/*Secondary Attributes*/
 	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_OutdoorCombatPower, GetOutdoorCombatPowerAttribute);
@@ -49,14 +55,20 @@ void UMiniAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	//
 	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, ATK, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, DEF, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, Dodge, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, HIT, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, Block, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, Stability, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, Accuracy, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, Evasion, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, Crit, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, CritDMG, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, Healing, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, NormalAttackRange, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, CostRecovery, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, CrowdControlPower, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, CrowdControlRES, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, RelationshipRank, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, BonusRecipients, COND_None, REPNOTIFY_Always);
 	
-	
+	//5번
 	
 	//
 	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, Health, COND_None, REPNOTIFY_Always);
@@ -184,19 +196,19 @@ void UMiniAttributeSet::OnRep_DEF(const FGameplayAttributeData& OldDEF) const
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UMiniAttributeSet, DEF, OldDEF);
 }
 
-void UMiniAttributeSet::OnRep_HIT(const FGameplayAttributeData& OldHIT) const
+void UMiniAttributeSet::OnRep_Accuracy(const FGameplayAttributeData& OldAccuracy) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UMiniAttributeSet, HIT, OldHIT);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMiniAttributeSet, Accuracy, OldAccuracy);
 }
 
-void UMiniAttributeSet::OnRep_Dodge(const FGameplayAttributeData& OldDodge) const
+void UMiniAttributeSet::OnRep_Stability(const FGameplayAttributeData& OldStability) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UMiniAttributeSet, Dodge, OldDodge);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMiniAttributeSet, Stability, OldStability);
 }
 
-void UMiniAttributeSet::OnRep_Block(const FGameplayAttributeData& OldBlock) const
+void UMiniAttributeSet::OnRep_Evasion(const FGameplayAttributeData& OldEvasion) const
 {
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UMiniAttributeSet, Block, OldBlock);
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMiniAttributeSet, Evasion, OldEvasion);
 }
 
 void UMiniAttributeSet::OnRep_Crit(const FGameplayAttributeData& OldCrit) const
@@ -214,3 +226,33 @@ void UMiniAttributeSet::OnRep_Healing(const FGameplayAttributeData& OldHealing) 
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UMiniAttributeSet, Healing, OldHealing);
 }
 
+void UMiniAttributeSet::OnRep_NormalAttackRange(const FGameplayAttributeData& OldNormalAttackRange) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMiniAttributeSet, NormalAttackRange, OldNormalAttackRange);
+}
+
+void UMiniAttributeSet::OnRep_CrowdControlRES(const FGameplayAttributeData& OldCrowdControlRES) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMiniAttributeSet, CrowdControlRES, OldCrowdControlRES);
+}
+
+void UMiniAttributeSet::OnRep_CostRecovery(const FGameplayAttributeData& OldCostRecovery) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMiniAttributeSet, CostRecovery, OldCostRecovery);
+}
+
+void UMiniAttributeSet::OnRep_CrowdControlPower(const FGameplayAttributeData& OldCrowdControlPower) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMiniAttributeSet, CrowdControlPower, OldCrowdControlPower);
+}
+
+void UMiniAttributeSet::OnRep_RelationshipRank(const FGameplayAttributeData& OldRelationshipRank) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMiniAttributeSet, RelationshipRank, OldRelationshipRank);
+}
+
+void UMiniAttributeSet::OnRep_BonusRecipients(const FGameplayAttributeData& OldBonusRecipients) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMiniAttributeSet, BonusRecipients, OldBonusRecipients);
+}
+//6번

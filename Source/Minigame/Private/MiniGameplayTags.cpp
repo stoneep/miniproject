@@ -9,19 +9,19 @@ FMiniGameplayTags FMiniGameplayTags::GameplayTags;
 void FMiniGameplayTags::InitializeNativeGameplayTags()
 {
 	GameplayTags.Attributes_Primary_ATK = UGameplayTagsManager::Get().AddNativeGameplayTag(
-			FName("Attributes.Primary.ATK"),
+					FName("Attributes.Primary.ATK"),
 			FString("Striking power"));
 	GameplayTags.Attributes_Primary_DEF = UGameplayTagsManager::Get().AddNativeGameplayTag(
-				FName("Attributes.Primary.DEF"),
+					FName("Attributes.Primary.DEF"),
 				FString("Defensive power"));
-	GameplayTags.Attributes_Primary_HIT = UGameplayTagsManager::Get().AddNativeGameplayTag(
-					FName("Attributes.Primary.HIT"),
+	GameplayTags.Attributes_Primary_Accuracy = UGameplayTagsManager::Get().AddNativeGameplayTag(
+					FName("Attributes.Primary.Accuracy"),
 					FString("Hit the target"));
-	GameplayTags.Attributes_Primary_Dodge = UGameplayTagsManager::Get().AddNativeGameplayTag(
-					FName("Attributes.Primary.Dodge"),
+	GameplayTags.Attributes_Primary_Evasion = UGameplayTagsManager::Get().AddNativeGameplayTag(
+					FName("Attributes.Primary.Evasion"),
 					FString("Dodge/Avoid"));
-	GameplayTags.Attributes_Primary_Block = UGameplayTagsManager::Get().AddNativeGameplayTag(
-					FName("Attributes.Primary.Block"),
+	GameplayTags.Attributes_Primary_Stability = UGameplayTagsManager::Get().AddNativeGameplayTag(
+					FName("Attributes.Primary.Stability"),
 					FString("Ignore Damage"));
 	GameplayTags.Attributes_Primary_Crit = UGameplayTagsManager::Get().AddNativeGameplayTag(
 					FName("Attributes.Primary.Crit"),
@@ -30,20 +30,36 @@ void FMiniGameplayTags::InitializeNativeGameplayTags()
 					FName("Attributes.Primary.CritDMG"),
 					FString("CriticalDMG"));
 	GameplayTags.Attributes_Primary_Healing = UGameplayTagsManager::Get().AddNativeGameplayTag(
-						FName("Attributes.Primary.Healing"),
-						FString("Healing"));
-
-	
+					FName("Attributes.Primary.Healing"),
+					FString("Healing"));
+	GameplayTags.Attributes_Primary_NormalAttackRange = UGameplayTagsManager::Get().AddNativeGameplayTag(
+					FName("Attributes.Primary.NormalAttackRange"),
+					FString("NormalAttackRange"));
+	GameplayTags.Attributes_Primary_CrowdControlPower = UGameplayTagsManager::Get().AddNativeGameplayTag(
+					FName("Attributes.Primary.CrowdControlPower"),
+					FString("CrowdControlPower"));
+	GameplayTags.Attributes_Primary_CrowdControlRES = UGameplayTagsManager::Get().AddNativeGameplayTag(
+					FName("Attributes.Primary.CrowdControlRES"),
+					FString("CrowdControlRES"));
+	GameplayTags.Attributes_Primary_CostRecovery = UGameplayTagsManager::Get().AddNativeGameplayTag(
+					FName("Attributes.Primary.CostRecovery"),
+					FString("CostRecovery"));
+	GameplayTags.Attributes_Primary_RelationshipRank = UGameplayTagsManager::Get().AddNativeGameplayTag(
+					FName("Attributes.Primary.RelationshipRank"),
+					FString("RelationshipRank"));
+	GameplayTags.Attributes_Primary_BonusRecipients = UGameplayTagsManager::Get().AddNativeGameplayTag(
+					FName("Attributes.Primary.BonusRecipients"),
+					FString("BonusRecipients"));
 	//
 	GameplayTags.Attributes_Secondary_OutdoorCombatPower = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Secondary.OutdoorCombatPower"),
-		FString("OutDoorSTR"));
+		FString("OutDoorATK"));
 	GameplayTags.Attributes_Secondary_StreetCombatPower = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Secondary.StreetCombatPower"),
-		FString("StreetCombatSTR"));
+		FString("StreetCombatATK"));
 	GameplayTags.Attributes_Secondary_IndoorCombatPower = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Secondary.IndoorCombatPower"),
-		FString("IndoorCombatSTR"));
+		FString("IndoorCombatATK"));
 	GameplayTags.Attributes_Secondary_MaxHealth = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Secondary.MaxHealth"),
 		FString("MaxHealth"));
