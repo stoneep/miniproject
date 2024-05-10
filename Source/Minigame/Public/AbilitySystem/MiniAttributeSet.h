@@ -93,6 +93,7 @@ public:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxMana, Category = "Vital Attributes")
 	FGameplayAttributeData MaxMana;
 	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, MaxMana);
+	
 	/*
 	 * Primary STATUS Attributes
 	 */
@@ -153,7 +154,10 @@ public:
 	FGameplayAttributeData BonusRecipients;
 	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, BonusRecipients);
 //3번
-	
+
+	/*
+	 * Vital Attributes
+	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes")
 	FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, Health);
@@ -170,7 +174,13 @@ public:
 	FGameplayAttributeData EXP;
 	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, EXP);
 
-
+	/*
+	* Meta Attributes
+	*/
+	UPROPERTY(BlueprintReadOnly, Category = "Meta Attributes")
+	FGameplayAttributeData IncomingDamage;
+	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, IncomingDamage);
+	
 	UFUNCTION()
 	void OnRep_StreetCombatPower(const FGameplayAttributeData& OldStreetCombatPower) const;
 	UFUNCTION()

@@ -46,6 +46,10 @@ public:
 	FGameplayTag InputTag_2;
 	FGameplayTag InputTag_3;
 	FGameplayTag InputTag_4;
+
+	
+	FGameplayTag Damage;
+	
 //1번
 private:
 	static FMiniGameplayTags GameplayTags;

@@ -7,7 +7,7 @@
 #include "AbilitySystemComponent.h"
 #include "Actor/MiniProjectile.h"
 #include "Interaction/CombatInterface.h"
-
+#include "Minigame/Public/MiniGameplayTags.h"
 
 void UMiniProjectileSkill::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
                                            const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
@@ -40,6 +40,14 @@ void UMiniProjectileSkill::SpawnProjectile(const FVector& ProjectileTargetLocati
 			ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 		const UAbilitySystemComponent* SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
 		const FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), SourceASC->MakeEffectContext());
+
+		const FMiniGameplayTags GameplayTags = FMiniGameplayTags::Get();
+		const float ScaledDamage = Damage.GetValueAtLevel(2);
+		
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Orange, FString::Printf(TEXT("Fire Damage: %f"), ScaledDamage));
+		
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, GameplayTags.Damage, ScaledDamage);
+		//.Damage=Key
 		Projectile->DamageEffectSpecHandle = SpecHandle;
 		Projectile->FinishSpawning(SpawnTransform);
 	}
