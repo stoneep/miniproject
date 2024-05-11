@@ -49,7 +49,7 @@ public:
 
 	
 	FGameplayTag Damage;
-	//FGameplayTag Effects_HitReact;
+	FGameplayTag Effects_HitReact;
 //1번
 private:
 	static FMiniGameplayTags GameplayTags;

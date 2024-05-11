@@ -12,6 +12,7 @@ class UGameplayEffect;
 class UAbilitySystemComponent;
 class UAttributeSet;
 class UGameplayAbility;
+class UAnimMontage;
 
 UCLASS(Abstract)
 class MINIGAME_API AMiniCharacterBase : public ACharacter, public IAbilitySystemInterface, public ICombatInterface
@@ -23,7 +24,8 @@ public:
 	AMiniCharacterBase();
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
-	
+
+	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
 protected:
 
 	virtual void BeginPlay() override;
@@ -54,14 +56,15 @@ protected:
 	TSubclassOf<UGameplayEffect> DefaultVitalAttributes;
 	
 	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const;
-	void InitializeDefaultAttributes() const;
+	virtual void InitializeDefaultAttributes() const;
 
 	void AddCharacterAbilities();
 
 private:
 	UPROPERTY(EditAnywhere, Category="Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
-
 	
+	UPROPERTY(EditAnywhere, Category="Abilities")
+	TObjectPtr<UAnimMontage> HitReactMontage;
 };
 

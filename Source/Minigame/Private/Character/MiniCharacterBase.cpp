@@ -27,6 +27,11 @@ UAbilitySystemComponent* AMiniCharacterBase::GetAbilitySystemComponent() const
 }
 
 
+UAnimMontage* AMiniCharacterBase::GetHitReactMontage_Implementation()
+{
+	return HitReactMontage;
+}
+
 void AMiniCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
