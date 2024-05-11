@@ -5,6 +5,8 @@
 /.idea.Minigame.iml
 /modules.xml
 /contentModel.xml
+/Content/*/TokyoStylizedEnvironment/*
+/Content/*/TokyoStylizedEnvironment/
 /projectSettingsUpdater.xml
 # Editor-based HTTP Client requests
 /httpRequests/
