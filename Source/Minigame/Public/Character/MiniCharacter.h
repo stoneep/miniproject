@@ -50,7 +50,6 @@ public:
 private:
 	virtual void InitAbilityActorInfo() override;
 
-	
 protected:
 
 	virtual void BeginPlay() override;
