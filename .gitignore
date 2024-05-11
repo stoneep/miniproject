@@ -5,6 +5,7 @@ Saved
 Build
 Content/*/TokyoStylizedEnvironment/*
 TokyoStylizedEnvironment/
+TokyoStylizedEnvironment/*
 .vscode
 .vs
 *.VC.db
