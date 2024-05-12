@@ -15,11 +15,17 @@ struct MiniDamageStatics
 	DECLARE_ATTRIBUTE_CAPTUREDEF(DEF);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(Accuracy);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(Evasion);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(Crit);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(CritDMG);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(Stability);
 	MiniDamageStatics()
 	{
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UMiniAttributeSet, DEF, Target, false);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UMiniAttributeSet, Evasion, Target, false);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UMiniAttributeSet, Accuracy, Source, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UMiniAttributeSet, Crit, Source, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UMiniAttributeSet, CritDMG, Source, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UMiniAttributeSet, Stability, Target, false);
 	}
 };
 
@@ -35,6 +41,9 @@ UExecCalc_Damage::UExecCalc_Damage()
 	RelevantAttributesToCapture.Add(DamageStatics().DEFDef);
 	RelevantAttributesToCapture.Add(DamageStatics().EvasionDef);
 	RelevantAttributesToCapture.Add(DamageStatics().AccuracyDef);
+	RelevantAttributesToCapture.Add(DamageStatics().CritDef);
+	RelevantAttributesToCapture.Add(DamageStatics().CritDMGDef);
+	RelevantAttributesToCapture.Add(DamageStatics().StabilityDef);
 }
 
 void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
@@ -94,6 +103,29 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	// DEF = FMath::Max<float>(0.f, DEF);
 	// ++DEF;
 
+
+	float SourceCrit = 0.f;
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().CritDef, EvaluationParameters, SourceCrit);
+	SourceCrit = FMath::Max<float>(SourceCrit, 0.f);
+
+	float SourceCritDMG = 0.f;
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().CritDMGDef, EvaluationParameters, SourceCritDMG);
+	SourceCritDMG = FMath::Max<float>(SourceCritDMG, 0.f);
+	
+	float TargetStability = 0.f;
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().StabilityDef, EvaluationParameters, TargetStability);
+	TargetStability = FMath::Max<float>(TargetStability, 0.f);
+
+	const FRealCurve* StabilityCurve = CharacterClassInfo->DamageCalculationCoefficients->FindCurve(FName("Stability"), FString());
+	const float StabilityCoefficient = StabilityCurve->Eval(TargetCombatInterface->GetPlayerLevel());
+	
+	// Critical Hit Resistance reduces Critical percent by a certain percentage
+	const float Crit = SourceCrit - TargetStability * StabilityCoefficient;
+	const bool bCritDMG = FMath::RandRange(1, 100) < Crit;
+	// Bonus Critical DMG
+	Damage = bCritDMG ? 2.f * Damage + SourceCritDMG : Damage;
+
+	
 	const FGameplayModifierEvaluatedData EvaluatedData(UMiniAttributeSet::GetIncomingDamageAttribute(), EGameplayModOp::Additive, Damage);
 	OutExecutionOutput.AddOutputModifier(EvaluatedData);
 }

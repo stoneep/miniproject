@@ -20,16 +20,16 @@ public:
 
 	FGameplayTag Attributes_Primary_ATK;
 	FGameplayTag Attributes_Primary_DEF;
-	FGameplayTag Attributes_Primary_Stability;
-	FGameplayTag Attributes_Primary_Accuracy;
-	FGameplayTag Attributes_Primary_Evasion;
-	FGameplayTag Attributes_Primary_Crit;
+	FGameplayTag Attributes_Primary_Stability; //안정치
+	FGameplayTag Attributes_Primary_Accuracy; //명중치
+	FGameplayTag Attributes_Primary_Evasion; //회피
+	FGameplayTag Attributes_Primary_Crit; 
 	FGameplayTag Attributes_Primary_CritDMG;
-	FGameplayTag Attributes_Primary_Healing;
-	FGameplayTag Attributes_Primary_NormalAttackRange;
-	FGameplayTag Attributes_Primary_CrowdControlRES;
+	FGameplayTag Attributes_Primary_Healing; //치유력
+	FGameplayTag Attributes_Primary_NormalAttackRange; //사거리
+	FGameplayTag Attributes_Primary_CrowdControlRES; //군중제어 강화
 	FGameplayTag Attributes_Primary_CostRecovery;
-	FGameplayTag Attributes_Primary_CrowdControlPower;
+	FGameplayTag Attributes_Primary_CrowdControlPower; //군중제어 저항
 	FGameplayTag Attributes_Primary_RelationshipRank;
 	FGameplayTag Attributes_Primary_BonusRecipients;
 
