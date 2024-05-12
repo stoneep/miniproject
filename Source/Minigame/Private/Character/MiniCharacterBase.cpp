@@ -32,6 +32,20 @@ UAnimMontage* AMiniCharacterBase::GetHitReactMontage_Implementation()
 	return HitReactMontage;
 }
 
+void AMiniCharacterBase::Die()
+{
+	MulticastHandleDeath();
+}
+
+void AMiniCharacterBase::MulticastHandleDeath_Implementation()
+{
+	GetMesh()->SetSimulatePhysics(true);
+	GetMesh()->SetEnableGravity(true);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	GetMesh()->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
 void AMiniCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();

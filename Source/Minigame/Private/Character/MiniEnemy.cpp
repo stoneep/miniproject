@@ -28,6 +28,12 @@ int32 AMiniEnemy::GetPlayerLevel()
 	return Level;
 }
 
+void AMiniEnemy::Die()
+{
+	SetLifeSpan(LifeSpan);
+	Super::Die();
+}
+
 void AMiniEnemy::BeginPlay()
 {
 	Super::BeginPlay();
