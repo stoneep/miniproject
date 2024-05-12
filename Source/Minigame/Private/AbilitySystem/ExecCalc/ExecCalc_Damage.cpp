@@ -5,7 +5,10 @@
 
 #include "AbilitySystemComponent.h"
 #include "MiniGameplayTags.h"
+#include "AbilitySystem/MiniAbilitySystemLibrary.h"
 #include "AbilitySystem/MiniAttributeSet.h"
+#include "AbilitySystem/Data/CharacterClassInfo.h"
+#include "Interaction/CombatInterface.h"
 
 struct MiniDamageStatics
 {
@@ -40,9 +43,11 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	const UAbilitySystemComponent* SourceASC = ExecutionParams.GetSourceAbilitySystemComponent();
 	const UAbilitySystemComponent* TargetASC = ExecutionParams.GetTargetAbilitySystemComponent();
 
-	const AActor* SourceAvatar = SourceASC ? SourceASC->GetAvatarActor() : nullptr;
-	const AActor* TargetAvatar = TargetASC ? TargetASC->GetAvatarActor() : nullptr;
-
+	AActor* SourceAvatar = SourceASC ? SourceASC->GetAvatarActor() : nullptr;
+	AActor* TargetAvatar = TargetASC ? TargetASC->GetAvatarActor() : nullptr;
+	ICombatInterface* SourceCombatInterface = Cast<ICombatInterface>(SourceAvatar);
+	ICombatInterface* TargetCombatInterface = Cast<ICombatInterface>(TargetAvatar);
+	
 	const FGameplayEffectSpec& Spec = ExecutionParams.GetOwningSpec();
 
 	const FGameplayTagContainer* SourceTags = Spec.CapturedSourceTags.GetAggregatedTags();
@@ -69,14 +74,22 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().DEFDef, EvaluationParameters, TargetDEF);
 	TargetDEF = FMath::Max<float>(TargetDEF, 0.f);
 	
-	float SourceAccurary = 0.f;
-	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().AccuracyDef, EvaluationParameters, SourceAccurary);
-	SourceAccurary = FMath::Max<float>(SourceAccurary, 0.f);
+	float SourceAccuracy = 0.f;
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().AccuracyDef, EvaluationParameters, SourceAccuracy);
+	SourceAccuracy = FMath::Max<float>(SourceAccuracy, 0.f);
 
-	// Accurary ignores a percentage of  Target's DEF
-	const float EffectiveDEF = TargetDEF *= ( 100 - SourceAccurary * 0.25f ) / 100.f;
+	const UCharacterClassInfo* CharacterClassInfo = UMiniAbilitySystemLibrary::GetCharacterClassInfo(SourceAvatar);
+	const FRealCurve* AccuracyCurve = CharacterClassInfo->DamageCalculationCoefficients->FindCurve(FName("Accuracy"), FString());
+	const float AccuracyPenetrationCoefficient = AccuracyCurve->Eval(SourceCombatInterface->GetPlayerLevel());
+	
+	// Accuracy ignores a percentage of  Target's DEF
+	const float Evasion = TargetDEF *= ( 100 - SourceAccuracy * AccuracyPenetrationCoefficient ) / 100.f;
+
+	const FRealCurve* EvasionCurve = CharacterClassInfo->DamageCalculationCoefficients->FindCurve(FName("Evasion"), FString());
+	const float EvasionCoefficient = EvasionCurve->Eval(TargetCombatInterface->GetPlayerLevel());
 	// DEF ignores a percentage of incoming Damage
-	Damage *= ( 100 - EffectiveDEF * 0.333f ) / 100.f;
+	Damage *= ( 100 - Evasion * EvasionCoefficient ) / 100.f;
+	
 	// ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().DEFDef, EvaluationParameters, DEF);
 	// DEF = FMath::Max<float>(0.f, DEF);
 	// ++DEF;
