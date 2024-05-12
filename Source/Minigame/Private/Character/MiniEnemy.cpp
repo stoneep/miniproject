@@ -60,11 +60,14 @@ void AMiniEnemy::BeginPlay()
 				OnMaxHealthChanged.Broadcast(Data.NewValue);
 			}
 		);
-		
 		AbilitySystemComponent->RegisterGameplayTagEvent(FMiniGameplayTags::Get().Effects_HitReact, EGameplayTagEventType::NewOrRemoved).AddUObject(
 			this,
 			&AMiniEnemy::HitReactTagChanged
 		);
+		// AbilitySystemComponent->RegisterGameplayTagEvent(FMiniGameplayTags::Get().Effects_HitReact, EGameplayTagEventType::NewOrRemoved).AddUObject(
+		// 	this,
+		// 	&AMiniEnemy::DieReactTagChanged
+		// );
 		
 		OnHealthChanged.Broadcast(MiniAS->GetHealth());
 		OnMaxHealthChanged.Broadcast(MiniAS->GetMaxHealth());
@@ -76,6 +79,11 @@ void AMiniEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCou
 	bHitReacting = NewCount > 0;
 	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
 }
+
+// void AMiniEnemy::DieReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
+// {
+// 	bDieReacting = NewCount > 0;
+// }
 
 void AMiniEnemy::HighlightActor()
 {

@@ -152,6 +152,9 @@ void UMiniAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 			const bool bFatal = NewHealth <= 0.f;
 			if (bFatal)
 			{
+				// FGameplayTagContainer TagContainer;
+				// TagContainer.AddTag(FMiniGameplayTags::Get().Effects_DieReact);
+				// Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
 				ICombatInterface* CombatInterface = Cast<ICombatInterface>(Props.TargetAvatarActor);
 				if (CombatInterface)
 					CombatInterface->Die();

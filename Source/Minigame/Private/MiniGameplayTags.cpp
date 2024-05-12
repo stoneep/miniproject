@@ -99,5 +99,8 @@ void FMiniGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Effects_HitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(
 			FName("Effects.HitReact"),
 		FString("Effects_HitReact"));
+	// GameplayTags.Effects_HitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	// 		FName("Effects.DieReact"),
+	// 	FString("Effects_DieReact"));
 	
 }

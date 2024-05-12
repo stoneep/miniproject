@@ -32,8 +32,14 @@ UAnimMontage* AMiniCharacterBase::GetHitReactMontage_Implementation()
 	return HitReactMontage;
 }
 
+// UAnimMontage* AMiniCharacterBase::GetDieReactMontage_Implementation()
+// {
+// 	return DieReactMontage;
+// }
+
 void AMiniCharacterBase::Die()
 {
+	
 	MulticastHandleDeath();
 }
 

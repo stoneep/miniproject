@@ -50,6 +50,7 @@ public:
 	
 	FGameplayTag Damage;
 	FGameplayTag Effects_HitReact;
+	//FGameplayTag Effects_DieReact;
 //1번
 private:
 	static FMiniGameplayTags GameplayTags;
