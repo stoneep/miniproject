@@ -9,6 +9,8 @@
 #include "Net/UnrealNetwork.h"
 #include "MiniGameplayTags.h"
 #include "Interaction/CombatInterface.h"
+#include "Kismet/GameplayStatics.h"
+#include "Player/MiniPlayerController.h"
 
 UMiniAttributeSet::UMiniAttributeSet()
 {
@@ -112,7 +114,7 @@ void UMiniAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData
 		}
 		if (Props.SourceController)
 		{
-			ACharacter* SourceCharacter = Cast<ACharacter>(Props.SourceController->GetPawn());
+			Props.SourceCharacter = Cast<ACharacter>(Props.SourceController->GetPawn());
 		}
 	}
 	if (Data.Target.AbilityActorInfo.IsValid() && Data.Target.AbilityActorInfo->AvatarActor.IsValid())
@@ -165,7 +167,18 @@ void UMiniAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 				TagContainer.AddTag(FMiniGameplayTags::Get().Effects_HitReact);
 				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
 			}
+
+			ShowFloatingText(Props, LocalIncomingDamage);
 		}
+	}
+}
+
+void UMiniAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage) const
+{
+	if(Props.SourceCharacter != Props.TargetCharacter)
+	{
+		if(AMiniPlayerController* PC = Cast<AMiniPlayerController>(UGameplayStatics::GetPlayerController(Props.SourceCharacter, 0)))
+			PC->ShowDamageNumber(Damage, Props.TargetCharacter);
 	}
 }
 

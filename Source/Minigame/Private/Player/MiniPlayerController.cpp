@@ -12,7 +12,8 @@
 #include "Components/SplineComponent.h"
 #include "Interaction/EnemyInterface.h"
 #include "Input/MiniInputComponent.h"
-
+#include "GameFramework/Character.h"
+#include "UI/Widget/DamageTextComponent.h"
 
 AMiniPlayerController::AMiniPlayerController()
 {
@@ -91,6 +92,18 @@ void AMiniPlayerController::SetupInputComponent()
 	MiniInputComponent->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 	
 	
+}
+
+void AMiniPlayerController::ShowDamageNumber_Implementation(float DamageAmount, ACharacter* TargetCharacter)
+{
+	if (IsValid(TargetCharacter) && DamageTextComponentClass)
+	{
+		UDamageTextComponent* DamageText = NewObject<UDamageTextComponent>(TargetCharacter, DamageTextComponentClass);
+		DamageText->RegisterComponent();
+		DamageText->AttachToComponent(TargetCharacter->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+		DamageText->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+		DamageText->SetDamageText(DamageAmount);
+	}
 }
 
 void AMiniPlayerController::Move(const FInputActionValue& InputActionValue)

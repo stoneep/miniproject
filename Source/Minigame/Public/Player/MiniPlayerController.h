@@ -7,6 +7,7 @@
 #include "GameplayTagContainer.h"
 #include "MiniPlayerController.generated.h"
 
+class UDamageTextComponent;
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
@@ -25,11 +26,13 @@ class MINIGAME_API AMiniPlayerController : public APlayerController
 public:
 	AMiniPlayerController();
 	virtual void PlayerTick(float DeltaTime) override;
-	
+
+	UFUNCTION(Client, Reliable)
+	void ShowDamageNumber(float DamageAmount, ACharacter* TargetCharacter);
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
-	
+
 private:
 	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputMappingContext> MiniContext;
@@ -75,5 +78,8 @@ private:
 	TObjectPtr<USplineComponent> Spline;
 
 	void AutoRun();
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UDamageTextComponent> DamageTextComponentClass;
 };
 

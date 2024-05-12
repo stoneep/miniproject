@@ -50,6 +50,8 @@ void AMiniCharacterBase::MulticastHandleDeath_Implementation()
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 	GetMesh()->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	Dissolve();
 }
 
 void AMiniCharacterBase::BeginPlay()
@@ -91,6 +93,22 @@ void AMiniCharacterBase::AddCharacterAbilities()
 	if (!HasAuthority()) return;
 
 	MiniASC->AddCharacterAbilities(StartupAbilities);
+}
+
+void AMiniCharacterBase::Dissolve()
+{
+	if (IsValid(DissolveMaterialInstance))
+	{
+		UMaterialInstanceDynamic* DynamicMatInst = UMaterialInstanceDynamic::Create(DissolveMaterialInstance, this);
+		GetMesh()->SetMaterial(0, DynamicMatInst);
+		StartDissolveTimeline(DynamicMatInst);
+	}
+	// if (IsValid(WeaponDissolveMaterialInstance))
+	// {
+	// 	UMaterialInstanceDynamic* DynamicMatInst = UMaterialInstanceDynamic::Create(WeaponDissolveMaterialInstance, this);
+	// 	Weapon->SetMaterial(0, DynamicMatInst);
+	// 	StartWeaponDissolveTimeline(DynamicMatInst);
+	// }
 }
 
 
