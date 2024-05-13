@@ -49,6 +49,8 @@ public:
 
 	
 	FGameplayTag Damage;
+	FGameplayTag Damage_Fire;
+	
 	FGameplayTag Effects_HitReact;
 	//FGameplayTag Effects_DieReact;
 //1번

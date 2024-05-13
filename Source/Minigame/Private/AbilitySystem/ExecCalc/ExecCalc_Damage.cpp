@@ -9,6 +9,7 @@
 #include "AbilitySystem/MiniAttributeSet.h"
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "Interaction/CombatInterface.h"
+#include "MiniAbilityTypes.h"
 
 struct MiniDamageStatics
 {
@@ -74,6 +75,14 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().EvasionDef, EvaluationParameters, TargetEvasion);
 	TargetEvasion = FMath::Max<float>(TargetEvasion, 0.f);
 	const bool bEvasion = FMath::RandRange(1, 100) < TargetEvasion;
+
+	FGameplayEffectContextHandle EffectContextHandle = Spec.GetContext();
+	//FGameplayEffectContext* Context = EffectContextHandle.Get();
+	//FMiniGameplayEffectContext* MiniContext = static_cast<FMiniGameplayEffectContext*>(Context);
+	//MiniContext->SetIsBlockedHit(bEvasion);
+	UMiniAbilitySystemLibrary::SetIsBlockedHit(EffectContextHandle, bEvasion);
+
+	
 	// If Block, halve the damage.
 	Damage = bEvasion ? Damage / 2.f : Damage;
 	//if (bEvasion) Damage /= 2.f;
@@ -122,6 +131,9 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	// Critical Hit Resistance reduces Critical percent by a certain percentage
 	const float Crit = SourceCrit - TargetStability * StabilityCoefficient;
 	const bool bCritDMG = FMath::RandRange(1, 100) < Crit;
+
+	UMiniAbilitySystemLibrary::SetIsCriticalHit(EffectContextHandle, bCritDMG);
+	
 	// Bonus Critical DMG
 	Damage = bCritDMG ? 2.f * Damage + SourceCritDMG : Damage;
 

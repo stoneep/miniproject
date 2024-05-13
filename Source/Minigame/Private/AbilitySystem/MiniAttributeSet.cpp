@@ -8,6 +8,7 @@
 #include "GameplayEffectExtension.h"
 #include "Net/UnrealNetwork.h"
 #include "MiniGameplayTags.h"
+#include "AbilitySystem/MiniAbilitySystemLibrary.h"
 #include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/MiniPlayerController.h"
@@ -167,18 +168,20 @@ void UMiniAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 				TagContainer.AddTag(FMiniGameplayTags::Get().Effects_HitReact);
 				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
 			}
-
-			ShowFloatingText(Props, LocalIncomingDamage);
+			
+			const bool bEvasion = UMiniAbilitySystemLibrary::IsBlockedHit(Props.EffectContextHandle);
+			const bool bCritDMG = UMiniAbilitySystemLibrary::IsBlockedHit(Props.EffectContextHandle);
+			ShowFloatingText(Props, LocalIncomingDamage, bEvasion, bCritDMG);
 		}
 	}
 }
 
-void UMiniAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage) const
+void UMiniAttributeSet::ShowFloatingText(const FEffectProperties& Props, float Damage, bool bCritDMG, bool bEvasion) const
 {
 	if(Props.SourceCharacter != Props.TargetCharacter)
 	{
 		if(AMiniPlayerController* PC = Cast<AMiniPlayerController>(UGameplayStatics::GetPlayerController(Props.SourceCharacter, 0)))
-			PC->ShowDamageNumber(Damage, Props.TargetCharacter);
+			PC->ShowDamageNumber(Damage, Props.TargetCharacter,bCritDMG,bEvasion);
 	}
 }
 

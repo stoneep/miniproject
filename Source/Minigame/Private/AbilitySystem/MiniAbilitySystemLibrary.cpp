@@ -2,6 +2,8 @@
 
 
 #include "AbilitySystem/MiniAbilitySystemLibrary.h"
+
+#include "MiniAbilityTypes.h"
 #include "Game/MiniGameModeBase.h"
 #include "UI/WidgetController/MiniWidgetController.h"
 #include "Kismet/GameplayStatics.h"
@@ -80,4 +82,39 @@ UCharacterClassInfo* UMiniAbilitySystemLibrary::GetCharacterClassInfo(const UObj
 	AMiniGameModeBase* MiniGameMode = Cast<AMiniGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
 	if (MiniGameMode == nullptr) return nullptr;
 	return MiniGameMode->CharacterClassInfo;
+}
+
+bool UMiniAbilitySystemLibrary::IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if (const FMiniGameplayEffectContext* MiniEffectContext = static_cast<const FMiniGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		return MiniEffectContext->IsBlockedHit();
+	}
+	return false;
+}
+
+bool UMiniAbilitySystemLibrary::IsCriticalHit(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if (const FMiniGameplayEffectContext* MiniEffectContext = static_cast<const FMiniGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		return MiniEffectContext->IsCriticalHit();
+	}
+	return false;
+}
+
+void UMiniAbilitySystemLibrary::SetIsBlockedHit(FGameplayEffectContextHandle& EffectContextHandle, bool bInIsBlockedHit)
+{
+	if (FMiniGameplayEffectContext* MiniEffectContext = static_cast<FMiniGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		MiniEffectContext->SetIsBlockedHit(bInIsBlockedHit);
+	}
+}
+
+void UMiniAbilitySystemLibrary::SetIsCriticalHit(FGameplayEffectContextHandle& EffectContextHandle,
+	bool bInIsCriticalHit)
+{
+	if (FMiniGameplayEffectContext* MiniEffectContext = static_cast<FMiniGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		MiniEffectContext->SetIsCriticalHit(bInIsCriticalHit);
+	}
 }
