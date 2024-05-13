@@ -38,6 +38,13 @@ UMiniAttributeSet::UMiniAttributeSet()
 	TagsToAttributes.Add(GameplayTags.Attributes_Primary_BonusRecipients, GetBonusRecipientsAttribute);
 //4번
 
+	/* Resistance Attributes */
+
+	TagsToAttributes.Add(GameplayTags.Attributes_Resistance_Arcane, GetArcaneResistanceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Resistance_Lightning, GetLightningResistanceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Resistance_Physical, GetPhysicalResistanceAttribute);
+	
+	
 	/*Secondary Attributes*/
 	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_OutdoorCombatPower, GetOutdoorCombatPowerAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_Secondary_IndoorCombatPower, GetIndoorCombatPowerAttribute);
@@ -73,6 +80,14 @@ void UMiniAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, BonusRecipients, COND_None, REPNOTIFY_Always);
 	
 	//5번
+
+	// * Resistance Attributes
+
+	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, LightningResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, ArcaneResistance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, PhysicalResistance, COND_None, REPNOTIFY_Always);
+
+	
 	
 	//
 	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, Health, COND_None, REPNOTIFY_Always);
@@ -198,6 +213,21 @@ void UMiniAttributeSet::OnRep_OutdoorCombatPower(const FGameplayAttributeData& O
 void UMiniAttributeSet::OnRep_IndoorCombatPower(const FGameplayAttributeData& OldIndoorCombatPower) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UMiniAttributeSet, IndoorCombatPower, OldIndoorCombatPower);
+}
+
+void UMiniAttributeSet::OnRep_LightningResistance(const FGameplayAttributeData& OldLightningResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMiniAttributeSet, LightningResistance, OldLightningResistance);
+}
+
+void UMiniAttributeSet::OnRep_ArcaneResistance(const FGameplayAttributeData& OldArcaneResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMiniAttributeSet, ArcaneResistance, OldArcaneResistance);
+}
+
+void UMiniAttributeSet::OnRep_PhysicalResistance(const FGameplayAttributeData& OldPhysicalResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMiniAttributeSet, PhysicalResistance, OldPhysicalResistance);
 }
 
 void UMiniAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const

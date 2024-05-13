@@ -156,7 +156,7 @@ public:
 //3번
 
 	/*
-	 * Vital Attributes
+	 * Secondary Attributes
 	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes")
 	FGameplayAttributeData Health;
@@ -175,18 +175,52 @@ public:
 	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, EXP);
 
 	/*
+	 * Resistance Attributes
+	 */
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ArcaneResistance, Category = "Resistance Attributes")
+	FGameplayAttributeData ArcaneResistance;
+	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, ArcaneResistance);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_LightningResistance, Category = "Resistance Attributes")
+	FGameplayAttributeData LightningResistance;
+	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, LightningResistance);
+	
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_PhysicalResistance, Category = "Resistance Attributes")
+	FGameplayAttributeData PhysicalResistance;
+	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, PhysicalResistance);
+	
+	/*
 	* Meta Attributes
 	*/
 	UPROPERTY(BlueprintReadOnly, Category = "Meta Attributes")
 	FGameplayAttributeData IncomingDamage;
 	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, IncomingDamage);
 	
+	/*
+	* Meta Attributes
+	*/
 	UFUNCTION()
 	void OnRep_StreetCombatPower(const FGameplayAttributeData& OldStreetCombatPower) const;
 	UFUNCTION()
 	void OnRep_OutdoorCombatPower(const FGameplayAttributeData& OldOutdoorCombatPower) const;
 	UFUNCTION()
 	void OnRep_IndoorCombatPower(const FGameplayAttributeData& OldIndoorCombatPower) const;
+
+
+	/*
+	 * Resistance Attributes
+	 */
+	
+	UFUNCTION()
+	void OnRep_LightningResistance(const FGameplayAttributeData& OldLightningResistance) const;
+
+	UFUNCTION()
+	void OnRep_ArcaneResistance(const FGameplayAttributeData& OldArcaneResistance) const;
+
+	UFUNCTION()
+	void OnRep_PhysicalResistance(const FGameplayAttributeData& OldPhysicalResistance) const;
+	
 	
 	/*
 	 * 

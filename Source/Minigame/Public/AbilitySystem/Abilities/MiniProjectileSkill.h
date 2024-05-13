@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AbilitySystem/Abilities/MiniGameplayAbility.h"
+#include "AbilitySystem/Abilities/MiniDamageGameplayAbility.h"
 #include "MiniProjectileSkill.generated.h"
 
 class AMiniProjectile;
@@ -12,7 +12,7 @@ class UGameplayEffect;
  * 
  */
 UCLASS()
-class MINIGAME_API UMiniProjectileSkill : public UMiniGameplayAbility
+class MINIGAME_API UMiniProjectileSkill : public UMiniDamageGameplayAbility
 {
 	GENERATED_BODY()
 
@@ -27,6 +27,4 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<AMiniProjectile> ProjectileClass;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<UGameplayEffect> DamageEffectClass;
 };
