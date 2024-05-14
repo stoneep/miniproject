@@ -21,6 +21,12 @@ AMiniEnemy::AMiniEnemy()
 	AbilitySystemComponent = CreateDefaultSubobject<UMiniAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
+
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bUseControllerDesiredRotation = true;
+	
 	AttributeSet = CreateDefaultSubobject<UMiniAttributeSet>("AttributeSet");
 	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
 	HealthBar->SetupAttachment(GetRootComponent());
@@ -34,6 +40,8 @@ void AMiniEnemy::PossessedBy(AController* NewController)
 	MiniAIController = Cast<AMiniAIController>(NewController);
 	MiniAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
 	MiniAIController->RunBehaviorTree(BehaviorTree);
+	MiniAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), false);
+	MiniAIController->GetBlackboardComponent()->SetValueAsBool(FName("Tank"), CharacterClass != ECharacterClass::Dealer);
 }
 
 int32 AMiniEnemy::GetPlayerLevel()
@@ -93,6 +101,7 @@ void AMiniEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCou
 {
 	bHitReacting = NewCount > 0;
 	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
+	MiniAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), bHitReacting);
 }
 
 // void AMiniEnemy::DieReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
