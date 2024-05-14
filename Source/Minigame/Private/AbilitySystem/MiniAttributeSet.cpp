@@ -194,8 +194,8 @@ void UMiniAttributeSet::ShowFloatingText(const FEffectProperties& Props, float D
 {
 	if(Props.SourceCharacter != Props.TargetCharacter)
 	{
-		if(AMiniPlayerController* PC = Cast<AMiniPlayerController>(UGameplayStatics::GetPlayerController(Props.SourceCharacter, 0)))
-			PC->ShowDamageNumber(Damage, Props.TargetCharacter,bCritDMG,bEvasion);
+		if(AMiniPlayerController* PC = Cast<AMiniPlayerController>(Props.SourceCharacter->Controller))
+			PC->ShowDamageNumber(Damage, Props.TargetCharacter, bCritDMG, bEvasion);
 	}
 }
 

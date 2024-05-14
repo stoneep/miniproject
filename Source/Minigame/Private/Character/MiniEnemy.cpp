@@ -7,6 +7,9 @@
 #include "AbilitySystem/MiniAbilitySystemComponent.h"
 #include "AbilitySystem/MiniAbilitySystemLibrary.h"
 #include "AbilitySystem/MiniAttributeSet.h"
+#include "AI/MiniAIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "BehaviorTree/BehaviorTree.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Minigame/Minigame.h"
@@ -21,6 +24,16 @@ AMiniEnemy::AMiniEnemy()
 	AttributeSet = CreateDefaultSubobject<UMiniAttributeSet>("AttributeSet");
 	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
 	HealthBar->SetupAttachment(GetRootComponent());
+}
+
+void AMiniEnemy::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	if (!HasAuthority()) return;
+	MiniAIController = Cast<AMiniAIController>(NewController);
+	MiniAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
+	MiniAIController->RunBehaviorTree(BehaviorTree);
 }
 
 int32 AMiniEnemy::GetPlayerLevel()
@@ -39,8 +52,10 @@ void AMiniEnemy::BeginPlay()
 	Super::BeginPlay();
 	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	InitAbilityActorInfo();
-	UMiniAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent);
-	
+	if (HasAuthority())
+	{
+		UMiniAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent);
+	}
 	if (UMiniUserWidget* MiniUserWidget = Cast<UMiniUserWidget>(HealthBar->GetUserWidgetObject()))
 	{
 		MiniUserWidget->SetWidgetController(this);

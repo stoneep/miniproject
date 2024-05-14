@@ -9,6 +9,8 @@
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "MiniEnemy.generated.h"
 
+class AMiniAIController;
+class UBehaviorTree;
 class UWidgetComponent;
 /**
  * 
@@ -21,7 +23,7 @@ class MINIGAME_API AMiniEnemy : public AMiniCharacterBase, public IEnemyInterfac
 public:
 	
 	AMiniEnemy();
-
+	virtual void PossessedBy(AController* NewController) override;
 	virtual void HighlightActor() override;
 	virtual void UnHighlightActor() override;
 	virtual int32 GetPlayerLevel() override;
@@ -58,4 +60,10 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> HealthBar;
+
+	UPROPERTY(EditAnywhere, Category="AI")
+	TObjectPtr<UBehaviorTree> BehaviorTree;
+
+	UPROPERTY()
+	TObjectPtr<AMiniAIController> MiniAIController;
 };
