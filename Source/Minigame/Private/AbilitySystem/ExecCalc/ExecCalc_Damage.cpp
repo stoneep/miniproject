@@ -19,6 +19,15 @@ struct MiniDamageStatics
 	DECLARE_ATTRIBUTE_CAPTUREDEF(Crit);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(CritDMG);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(Stability);
+
+//
+	DECLARE_ATTRIBUTE_CAPTUREDEF(LightningResistance);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(ArcaneResistance);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(PhysicalResistance);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(BulletResistance);
+
+	TMap<FGameplayTag, FGameplayEffectAttributeCaptureDefinition> TagsToCaptureDefs;
+	
 	MiniDamageStatics()
 	{
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UMiniAttributeSet, DEF, Target, false);
@@ -27,6 +36,26 @@ struct MiniDamageStatics
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UMiniAttributeSet, Crit, Source, false);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UMiniAttributeSet, CritDMG, Source, false);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UMiniAttributeSet, Stability, Target, false);
+
+		//
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UMiniAttributeSet, BulletResistance, Target, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UMiniAttributeSet, ArcaneResistance, Target, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UMiniAttributeSet, LightningResistance, Target, false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UMiniAttributeSet, PhysicalResistance, Target, false);
+
+		const FMiniGameplayTags& Tags = FMiniGameplayTags::Get();
+
+		TagsToCaptureDefs.Add(Tags.Attributes_Primary_DEF, DEFDef);
+		TagsToCaptureDefs.Add(Tags.Attributes_Primary_Evasion, EvasionDef);
+		TagsToCaptureDefs.Add(Tags.Attributes_Primary_Accuracy, AccuracyDef);
+		TagsToCaptureDefs.Add(Tags.Attributes_Primary_Crit, CritDef);
+		TagsToCaptureDefs.Add(Tags.Attributes_Primary_CritDMG, CritDMGDef);
+		TagsToCaptureDefs.Add(Tags.Attributes_Primary_Stability, StabilityDef);
+		
+		TagsToCaptureDefs.Add(Tags.Attributes_Resistance_Bullet, BulletResistanceDef);
+		TagsToCaptureDefs.Add(Tags.Attributes_Resistance_Arcane, ArcaneResistanceDef);
+		TagsToCaptureDefs.Add(Tags.Attributes_Resistance_Lightning, LightningResistanceDef);
+		TagsToCaptureDefs.Add(Tags.Attributes_Resistance_Physical, PhysicalResistanceDef);
 	}
 };
 
@@ -45,6 +74,11 @@ UExecCalc_Damage::UExecCalc_Damage()
 	RelevantAttributesToCapture.Add(DamageStatics().CritDef);
 	RelevantAttributesToCapture.Add(DamageStatics().CritDMGDef);
 	RelevantAttributesToCapture.Add(DamageStatics().StabilityDef);
+	
+	RelevantAttributesToCapture.Add(DamageStatics().BulletResistanceDef);
+	RelevantAttributesToCapture.Add(DamageStatics().ArcaneResistanceDef);
+	RelevantAttributesToCapture.Add(DamageStatics().LightningResistanceDef);
+	RelevantAttributesToCapture.Add(DamageStatics().PhysicalResistanceDef);
 }
 
 void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
@@ -68,14 +102,27 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	// Get Damage Set by Caller Magnitude
 	float Damage = 0.f;
-	for (FGameplayTag DamageTypeTag : FMiniGameplayTags::Get().DamageTypes)
-	{
-		const float DamageTypeValue = Spec.GetSetByCallerMagnitude(DamageTypeTag);
-		Damage += DamageTypeValue;
-	}
+	// for (FGameplayTag DamageTypeTag : FMiniGameplayTags::Get().DamageTypes)
+	// {
+	// 	const float DamageTypeValue = Spec.GetSetByCallerMagnitude(DamageTypeTag);
+	// 	Damage += DamageTypeValue;
+	// }
 	for (const TTuple<FGameplayTag, FGameplayTag>& Pair  : FMiniGameplayTags::Get().DamageTypesToResistances)
 	{
-		const float DamageTypeValue = Spec.GetSetByCallerMagnitude(Pair.Key);
+		const FGameplayTag DamageTypeTag = Pair.Key;
+		const FGameplayTag ResistanceTag = Pair.Value;
+
+		checkf(MiniDamageStatics().TagsToCaptureDefs.Contains(ResistanceTag), TEXT("TagsToCaptureDefs doesn't contain Tag: [%s] in ExecCalc_Damage"), *ResistanceTag.ToString());
+		const FGameplayEffectAttributeCaptureDefinition CaptureDef = MiniDamageStatics().TagsToCaptureDefs[ResistanceTag];
+
+		float DamageTypeValue = Spec.GetSetByCallerMagnitude(Pair.Key);
+
+		float Resistance = 0.f;
+		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(CaptureDef, EvaluationParameters, Resistance);
+		Resistance = FMath::Clamp(Resistance, 0.f, 100.f);
+
+		DamageTypeValue *= (100.f - Resistance ) / 100.f;
+
 		Damage += DamageTypeValue;
 	}
 	

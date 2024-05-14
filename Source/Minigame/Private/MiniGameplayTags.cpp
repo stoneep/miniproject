@@ -98,12 +98,32 @@ void FMiniGameplayTags::InitializeNativeGameplayTags()
 		FString("Damage"));
 	
 	GameplayTags.Damage_Bullet = UGameplayTagsManager::Get().AddNativeGameplayTag(
-				FName("Damage_Bullet"),
-			FString("Damage"));
-	GameplayTags.DamageTypes.Add(GameplayTags.Damage_Bullet);
-
-
-
+		FName("Damage.Bullet"),
+		FString("Fire Damage Type")
+		);
+	//GameplayTags.DamageTypes.Add(GameplayTags.Damage_Bullet);
+	
+	GameplayTags.Damage_Lightning = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("Damage.Lightning"),
+			FString("Lightning Damage Type")
+			);
+	GameplayTags.Damage_Arcane = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Damage.Arcane"),
+		FString("Arcane Damage Type")
+		);
+	GameplayTags.Damage_Physical = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Damage.Physical"),
+		FString("Physical Damage Type")
+		);
+	
+	/*
+	* Damage Types
+	*/
+	
+	GameplayTags.Attributes_Resistance_Bullet = UGameplayTagsManager::Get().AddNativeGameplayTag(
+				FName("Attributes.Resistance.Bullet"),
+				FString("Resistance to Bullet damage")
+				);
 	GameplayTags.Attributes_Resistance_Arcane = UGameplayTagsManager::Get().AddNativeGameplayTag(
 			FName("Attributes.Resistance.Arcane"),
 			FString("Resistance to Arcane damage")
@@ -121,6 +141,7 @@ void FMiniGameplayTags::InitializeNativeGameplayTags()
 	 * Map of Damage Types to Resistances
 	 */
 	GameplayTags.DamageTypesToResistances.Add(GameplayTags.Damage_Arcane, GameplayTags.Attributes_Resistance_Arcane);
+	GameplayTags.DamageTypesToResistances.Add(GameplayTags.Damage_Bullet, GameplayTags.Attributes_Resistance_Bullet);
 	GameplayTags.DamageTypesToResistances.Add(GameplayTags.Damage_Lightning, GameplayTags.Attributes_Resistance_Lightning);
 	GameplayTags.DamageTypesToResistances.Add(GameplayTags.Damage_Physical, GameplayTags.Attributes_Resistance_Physical);
 

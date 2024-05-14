@@ -177,15 +177,18 @@ public:
 	/*
 	 * Resistance Attributes
 	 */
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_BulletResistance, Category = "Resistance Attributes")
+	FGameplayAttributeData BulletResistance;
+	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, BulletResistance);
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_LightningResistance, Category = "Resistance Attributes")
+	FGameplayAttributeData LightningResistance;
+	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, LightningResistance);
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ArcaneResistance, Category = "Resistance Attributes")
 	FGameplayAttributeData ArcaneResistance;
 	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, ArcaneResistance);
 
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_LightningResistance, Category = "Resistance Attributes")
-	FGameplayAttributeData LightningResistance;
-	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, LightningResistance);
-	
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_PhysicalResistance, Category = "Resistance Attributes")
 	FGameplayAttributeData PhysicalResistance;
 	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, PhysicalResistance);
@@ -208,10 +211,9 @@ public:
 	void OnRep_IndoorCombatPower(const FGameplayAttributeData& OldIndoorCombatPower) const;
 
 
-	/*
-	 * Resistance Attributes
-	 */
-	
+	UFUNCTION()
+	void OnRep_BulletResistance(const FGameplayAttributeData& OldBulletResistance) const;
+
 	UFUNCTION()
 	void OnRep_LightningResistance(const FGameplayAttributeData& OldLightningResistance) const;
 

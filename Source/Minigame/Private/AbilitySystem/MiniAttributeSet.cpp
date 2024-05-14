@@ -39,8 +39,8 @@ UMiniAttributeSet::UMiniAttributeSet()
 //4번
 
 	/* Resistance Attributes */
-
 	TagsToAttributes.Add(GameplayTags.Attributes_Resistance_Arcane, GetArcaneResistanceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attributes_Resistance_Bullet, GetBulletResistanceAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_Resistance_Lightning, GetLightningResistanceAttribute);
 	TagsToAttributes.Add(GameplayTags.Attributes_Resistance_Physical, GetPhysicalResistanceAttribute);
 	
@@ -80,9 +80,8 @@ void UMiniAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, BonusRecipients, COND_None, REPNOTIFY_Always);
 	
 	//5번
-
-	// * Resistance Attributes
-
+	// Resistance Attributes
+	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, BulletResistance, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, LightningResistance, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, ArcaneResistance, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UMiniAttributeSet, PhysicalResistance, COND_None, REPNOTIFY_Always);
@@ -214,6 +213,12 @@ void UMiniAttributeSet::OnRep_IndoorCombatPower(const FGameplayAttributeData& Ol
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UMiniAttributeSet, IndoorCombatPower, OldIndoorCombatPower);
 }
+
+void UMiniAttributeSet::OnRep_BulletResistance(const FGameplayAttributeData& OldBulletResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UMiniAttributeSet, BulletResistance, OldBulletResistance);
+}
+
 
 void UMiniAttributeSet::OnRep_LightningResistance(const FGameplayAttributeData& OldLightningResistance) const
 {
