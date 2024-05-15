@@ -62,7 +62,7 @@ void AMiniEnemy::BeginPlay()
 	InitAbilityActorInfo();
 	if (HasAuthority())
 	{
-		UMiniAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent);
+		UMiniAbilitySystemLibrary::GiveStartupAbilities(this, AbilitySystemComponent, CharacterClass);
 	}
 	if (UMiniUserWidget* MiniUserWidget = Cast<UMiniUserWidget>(HealthBar->GetUserWidgetObject()))
 	{
