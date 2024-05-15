@@ -162,5 +162,16 @@ void FMiniGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Abilities_Attack = UGameplayTagsManager::Get().AddNativeGameplayTag(
 			FName("Abilities.Attack"),
 		FString("Abilities_Attack"));
-	
+
+
+
+	GameplayTags.Montage_Attack_Weapon = UGameplayTagsManager::Get().AddNativeGameplayTag(
+				FName("Montage.Attack.Weapon"),
+			FString("Weapon"));
+	GameplayTags.Montage_Attack_LeftATK = UGameplayTagsManager::Get().AddNativeGameplayTag(
+					FName("Montage.Attack.LeftATK"),
+				FString("Weapon"));
+	GameplayTags.Montage_Attack_RightATK = UGameplayTagsManager::Get().AddNativeGameplayTag(
+				FName("Montage.Attack.RightATK"),
+			FString("Weapon"));
 }

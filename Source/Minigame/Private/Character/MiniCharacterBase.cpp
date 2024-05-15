@@ -5,6 +5,7 @@
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/MiniAbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "MiniGameplayTags.h"
 #include "Minigame/Minigame.h"
 
 AMiniCharacterBase::AMiniCharacterBase()
@@ -62,10 +63,25 @@ void AMiniCharacterBase::BeginPlay()
 	
 }
 
-FVector AMiniCharacterBase::GetCombatSocketLocation_Implementation()
+FVector AMiniCharacterBase::GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag)
 {
-	check(Weapon);
-	return Weapon->GetSocketLocation(WeaponTipSocketName);
+	const FMiniGameplayTags& GameplayTags = FMiniGameplayTags::Get();
+	if(MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_Weapon) && IsValid(Weapon))
+	{
+		return Weapon->GetSocketLocation(WeaponTipSocketName);
+	}
+	if(MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_LeftATK))
+	{
+		return GetMesh()->GetSocketLocation(LeftATKSocketName);
+	}
+	if(MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_RightATK))
+	{
+		return GetMesh()->GetSocketLocation(RightATKSocketName);
+	}
+	return FVector();
+	
+	//check(Weapon);
+	//return Weapon->GetSocketLocation(WeaponTipSocketName);
 }
 
 bool AMiniCharacterBase::IsDead_Implementation() const
@@ -76,6 +92,11 @@ bool AMiniCharacterBase::IsDead_Implementation() const
 AActor* AMiniCharacterBase::GetAvatar_Implementation()
 {
 	return  this;
+}
+
+TArray<FTaggedMontage> AMiniCharacterBase::GetAttackMontages_Implementation()
+{
+	return AttackMontages;
 }
 
 void AMiniCharacterBase::InitAbilityActorInfo()
