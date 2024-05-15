@@ -52,6 +52,8 @@ void AMiniCharacterBase::MulticastHandleDeath_Implementation()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	Dissolve();
+
+	bDead = true;
 }
 
 void AMiniCharacterBase::BeginPlay()
@@ -64,6 +66,16 @@ FVector AMiniCharacterBase::GetCombatSocketLocation_Implementation()
 {
 	check(Weapon);
 	return Weapon->GetSocketLocation(WeaponTipSocketName);
+}
+
+bool AMiniCharacterBase::IsDead_Implementation() const
+{
+	return bDead;
+}
+
+AActor* AMiniCharacterBase::GetAvatar_Implementation()
+{
+	return  this;
 }
 
 void AMiniCharacterBase::InitAbilityActorInfo()
