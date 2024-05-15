@@ -14,6 +14,11 @@ class MINIGAME_API UMiniDamageGameplayAbility : public UMiniGameplayAbility
 {
 	GENERATED_BODY()
 
+public:
+
+	UFUNCTION(BlueprintCallable)
+	void CauseDamage(AActor* TargetActor);
+	
 
 protected:
 	
