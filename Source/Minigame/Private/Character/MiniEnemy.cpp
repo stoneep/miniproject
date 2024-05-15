@@ -55,6 +55,16 @@ void AMiniEnemy::Die()
 	Super::Die();
 }
 
+void AMiniEnemy::SetCombatTarget_Implementation(AActor* InCombatTarget)
+{
+	CombatTarget = InCombatTarget;
+}
+
+AActor* AMiniEnemy::GetCombatTarget_Implementation() const
+{
+	return CombatTarget;
+}
+
 void AMiniEnemy::BeginPlay()
 {
 	Super::BeginPlay();
