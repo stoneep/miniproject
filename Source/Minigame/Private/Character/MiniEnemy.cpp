@@ -111,7 +111,10 @@ void AMiniEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCou
 {
 	bHitReacting = NewCount > 0;
 	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
-	MiniAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), bHitReacting);
+	if (MiniAIController && MiniAIController->GetBlackboardComponent())
+	{
+		MiniAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), bHitReacting);
+	}
 }
 
 // void AMiniEnemy::DieReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
