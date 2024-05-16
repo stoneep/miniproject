@@ -82,7 +82,7 @@ void UMiniAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContext
 	{
 		if (ICombatInterface* CombatInterface = Cast<ICombatInterface>(ASC->GetAvatarActor()))
 		{
-			FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
+			FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, CombatInterface->GetPlayerLevel());
 			ASC->GiveAbility(AbilitySpec);
 		}
 	} 
