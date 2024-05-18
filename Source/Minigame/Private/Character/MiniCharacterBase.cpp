@@ -99,6 +99,11 @@ TArray<FTaggedMontage> AMiniCharacterBase::GetAttackMontages_Implementation()
 	return AttackMontages;
 }
 
+UNiagaraSystem* AMiniCharacterBase::GetParticleEffect_Implementation()
+{
+	return ParticleEffect;
+}
+
 void AMiniCharacterBase::InitAbilityActorInfo()
 {
 }
