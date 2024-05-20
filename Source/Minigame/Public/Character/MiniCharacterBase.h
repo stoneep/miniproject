@@ -8,6 +8,7 @@
 #include "Interaction/CombatInterface.h"
 #include "MiniCharacterBase.generated.h"
 
+class UNiagaraSystem;
 class UGameplayEffect;
 class UAbilitySystemComponent;
 class UAttributeSet;
@@ -31,12 +32,14 @@ public:
 	virtual bool IsDead_Implementation() const override;
 	virtual AActor* GetAvatar_Implementation() override;
 	virtual TArray<FTaggedMontage> GetAttackMontages_Implementation() override;
+	virtual UNiagaraSystem* GetParticleEffect_Implementation() override;
 	
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastHandleDeath();
 	
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	TArray<FTaggedMontage> AttackMontages;
+	
 protected:
 
 	virtual void BeginPlay() override;
@@ -91,6 +94,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UMaterialInstance> WeaponDissolveMaterialInstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
+	UNiagaraSystem* ParticleEffect;
 	
 private:
 	UPROPERTY(EditAnywhere, Category="Abilities")

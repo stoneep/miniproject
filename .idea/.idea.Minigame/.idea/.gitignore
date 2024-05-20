@@ -2,12 +2,10 @@
 /shelf/
 /workspace.xml
 # Rider ignored files
-/.idea.Minigame.iml
-/modules.xml
 /contentModel.xml
-/Content/*/TokyoStylizedEnvironment/*
-/Content/*/TokyoStylizedEnvironment/
+/.idea.Minigame.iml
 /projectSettingsUpdater.xml
+/modules.xml
 # Editor-based HTTP Client requests
 /httpRequests/
 # Datasource local storage ignored files

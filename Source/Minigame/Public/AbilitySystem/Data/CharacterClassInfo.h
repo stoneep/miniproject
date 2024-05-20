@@ -12,10 +12,9 @@ class UGameplayAbility;
 UENUM(BlueprintType)
 enum class ECharacterClass : uint8
 {
-	Dealer,
-	Support,
-	Tank,
-	Healer
+	Elementalist,
+	Warrior,
+	Ranger
 };
 
 USTRUCT(BlueprintType)

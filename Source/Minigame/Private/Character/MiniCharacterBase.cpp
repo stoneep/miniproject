@@ -33,11 +33,6 @@ UAnimMontage* AMiniCharacterBase::GetHitReactMontage_Implementation()
 	return HitReactMontage;
 }
 
-// UAnimMontage* AMiniCharacterBase::GetDieReactMontage_Implementation()
-// {
-// 	return DieReactMontage;
-// }
-
 void AMiniCharacterBase::Die()
 {
 	
@@ -99,6 +94,11 @@ TArray<FTaggedMontage> AMiniCharacterBase::GetAttackMontages_Implementation()
 	return AttackMontages;
 }
 
+UNiagaraSystem* AMiniCharacterBase::GetParticleEffect_Implementation()
+{
+	return ParticleEffect;
+}
+
 void AMiniCharacterBase::InitAbilityActorInfo()
 {
 }
@@ -136,12 +136,6 @@ void AMiniCharacterBase::Dissolve()
 		GetMesh()->SetMaterial(0, DynamicMatInst);
 		StartDissolveTimeline(DynamicMatInst);
 	}
-	// if (IsValid(WeaponDissolveMaterialInstance))
-	// {
-	// 	UMaterialInstanceDynamic* DynamicMatInst = UMaterialInstanceDynamic::Create(WeaponDissolveMaterialInstance, this);
-	// 	Weapon->SetMaterial(0, DynamicMatInst);
-	// 	StartWeaponDissolveTimeline(DynamicMatInst);
-	// }
 }
 
 

@@ -50,6 +50,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category="MiniAbilitySystemLibrary|GameplayMechanics")
 	static void GetLivePlayersWithinRadius(const UObject* WorldContextObject, TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, float Radius, const FVector& SphereOrigin);
 
-	UFUNCTION(BlueprintCallable, Category="MiniAbilitySystemLibrary|GameplayMechanics")
+	UFUNCTION(BlueprintPure, Category="MiniAbilitySystemLibrary|GameplayMechanics")
 	static bool IsNotFriend(AActor* FirstActor, AActor* SecondActor);
 };

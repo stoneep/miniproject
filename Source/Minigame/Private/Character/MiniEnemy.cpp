@@ -41,7 +41,7 @@ void AMiniEnemy::PossessedBy(AController* NewController)
 	MiniAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
 	MiniAIController->RunBehaviorTree(BehaviorTree);
 	MiniAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), false);
-	MiniAIController->GetBlackboardComponent()->SetValueAsBool(FName("Dealer"), CharacterClass != ECharacterClass::Tank);
+	MiniAIController->GetBlackboardComponent()->SetValueAsBool(FName("RangedAttacker"), CharacterClass != ECharacterClass::Warrior);
 }
 
 int32 AMiniEnemy::GetPlayerLevel()
@@ -52,6 +52,7 @@ int32 AMiniEnemy::GetPlayerLevel()
 void AMiniEnemy::Die()
 {
 	SetLifeSpan(LifeSpan);
+	if (MiniAIController) MiniAIController->GetBlackboardComponent()->SetValueAsBool(FName("Dead"), true);
 	Super::Die();
 }
 
