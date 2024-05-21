@@ -33,6 +33,7 @@ public:
 	virtual AActor* GetAvatar_Implementation() override;
 	virtual TArray<FTaggedMontage> GetAttackMontages_Implementation() override;
 	virtual UNiagaraSystem* GetParticleEffect_Implementation() override;
+	virtual FTaggedMontage GetTaggedMontageByTag_Implementation(const FGameplayTag& MontageTag) override;
 	
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastHandleDeath();

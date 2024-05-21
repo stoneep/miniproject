@@ -61,17 +61,17 @@ void AMiniCharacterBase::BeginPlay()
 FVector AMiniCharacterBase::GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag)
 {
 	const FMiniGameplayTags& GameplayTags = FMiniGameplayTags::Get();
-	if(MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_Weapon) && IsValid(Weapon))
+	if(MontageTag.MatchesTagExact(GameplayTags.CombatSocket_Weapon) && IsValid(Weapon))
 	{
 		return Weapon->GetSocketLocation(WeaponTipSocketName);
 	}
-	if(MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_LeftATK))
-	{
-		return GetMesh()->GetSocketLocation(LeftATKSocketName);
-	}
-	if(MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_RightATK))
+	if(MontageTag.MatchesTagExact(GameplayTags.CombatSocket_RightATK))
 	{
 		return GetMesh()->GetSocketLocation(RightATKSocketName);
+	}
+	if(MontageTag.MatchesTagExact(GameplayTags.CombatSocketLeftATK))
+	{
+		return GetMesh()->GetSocketLocation(LeftATKSocketName);
 	}
 	return FVector();
 	
@@ -97,6 +97,17 @@ TArray<FTaggedMontage> AMiniCharacterBase::GetAttackMontages_Implementation()
 UNiagaraSystem* AMiniCharacterBase::GetParticleEffect_Implementation()
 {
 	return ParticleEffect;
+}
+
+FTaggedMontage AMiniCharacterBase::GetTaggedMontageByTag_Implementation(const FGameplayTag& MontageTag)
+{
+	for (FTaggedMontage TaggedMontage : AttackMontages)
+	{
+		if (TaggedMontage.MontageTag == MontageTag)
+			return TaggedMontage;
+	}
+	return FTaggedMontage();
+
 }
 
 void AMiniCharacterBase::InitAbilityActorInfo()

@@ -18,7 +18,7 @@ void UMiniProjectileSkill::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 
 void UMiniProjectileSkill::SpawnProjectile(const FVector& ProjectileTargetLocation)
 {
-	const FVector SocketLocation = ICombatInterface::Execute_GetCombatSocketLocation(GetAvatarActorFromActorInfo(),FMiniGameplayTags::Get().Montage_Attack_Weapon);
+	const FVector SocketLocation = ICombatInterface::Execute_GetCombatSocketLocation(GetAvatarActorFromActorInfo(),FMiniGameplayTags::Get().CombatSocket_Weapon);
 	FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
 
 	FTransform SpawnTransform;
