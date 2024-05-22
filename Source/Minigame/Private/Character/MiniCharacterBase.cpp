@@ -6,6 +6,7 @@
 #include "AbilitySystem/MiniAbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "MiniGameplayTags.h"
+#include "Kismet/GameplayStatics.h"
 #include "Minigame/Minigame.h"
 
 AMiniCharacterBase::AMiniCharacterBase()
@@ -41,6 +42,8 @@ void AMiniCharacterBase::Die()
 
 void AMiniCharacterBase::MulticastHandleDeath_Implementation()
 {
+	UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation(), GetActorRotation());
+	
 	GetMesh()->SetSimulatePhysics(true);
 	GetMesh()->SetEnableGravity(true);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
