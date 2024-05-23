@@ -159,10 +159,13 @@ void FMiniGameplayTags::InitializeNativeGameplayTags()
 	/*
 	 * Abilities
 	*/
+	GameplayTags.Abilities_Summon = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("Abilities.Summon"),
+		FString("Abilities_Summon"));
 	GameplayTags.Abilities_Attack = UGameplayTagsManager::Get().AddNativeGameplayTag(
-			FName("Abilities.Attack"),
-		FString("Abilities_Attack"));
-
+				FName("Abilities.Attack"),
+			FString("Abilities_Attack"));
+	
 	/*
 	* Combat sockets
 	*/

@@ -113,6 +113,16 @@ FTaggedMontage AMiniCharacterBase::GetTaggedMontageByTag_Implementation(const FG
 
 }
 
+int32 AMiniCharacterBase::GetMinionCount_Implementation()
+{
+	return MinionCount;
+}
+
+void AMiniCharacterBase::IncremenetMinionCount_Implementation(int32 Amount)
+{
+	MinionCount += Amount;
+}
+
 void AMiniCharacterBase::InitAbilityActorInfo()
 {
 }
