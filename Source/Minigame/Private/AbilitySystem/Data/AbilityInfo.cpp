@@ -16,7 +16,9 @@ FMiniAbilityInfo UAbilityInfo::FindAbilityInfoForTag(const FGameplayTag& Ability
 	}
 
 	if(bLogNotFound)
+	{
 		UE_LOG(LogMini, Error, TEXT("Cant't find info for AbilityTag [%s] OnAbilityInfo [%s]"), *AbilityTag.ToString(), *GetNameSafe(this));
+	}
 
 	return FMiniAbilityInfo();
 }

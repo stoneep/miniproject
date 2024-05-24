@@ -4,6 +4,7 @@
 #include "UI/WidgetController/OverlayWidgetController.h"
 #include "AbilitySystem/MiniAbilitySystemComponent.h"
 #include "AbilitySystem/MiniAttributeSet.h"
+#include "AbilitySystem/Data/AbilityInfo.h"
 
 void UOverlayWidgetController::BroadcastInitialValues()
 {
@@ -46,39 +47,49 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 				OnMaxManaChanged.Broadcast(Data.NewValue);
 			}
 		);
-	Cast<UMiniAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
-		[this](const FGameplayTagContainer& AssetTags)
+	
+	if (UMiniAbilitySystemComponent* MiniASC = Cast<UMiniAbilitySystemComponent>(AbilitySystemComponent))
+	{
+		if(MiniASC->bStartupAbilitiesGiven)
 		{
-			for (const FGameplayTag& Tag : AssetTags)
+			OnInitializeStartupAbilities(MiniASC);
+		}
+		else
+		{
+			MiniASC->AbilitiesGivenDelegate.AddUObject(this, &UOverlayWidgetController::OnInitializeStartupAbilities);
+		}
+		
+		MiniASC->EffectAssetTags.AddLambda(
+		[this](const FGameplayTagContainer& AssetTags)
 			{
-				FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
-				if (Tag.MatchesTag(MessageTag))
+				for (const FGameplayTag& Tag : AssetTags)
 				{
+					FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
+					if (Tag.MatchesTag(MessageTag))
+					{
 					const FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
 					MessageWidgetRowDelegate.Broadcast(*Row);
-				}
+					}
 				
+				}
 			}
-		}
-	);
+		);
+	}
+	
+	
+	
 }
 
-// void UOverlayWidgetController::HealthChanged(const FOnAttributeChangeData& Data) const
-// {
-// 	OnHealthChanged.Broadcast(Data.NewValue);
-// }
-//
-// void UOverlayWidgetController::MaxHealthChanged(const FOnAttributeChangeData& Data) const
-// {
-// 	OnMaxHealthChanged.Broadcast(Data.NewValue);
-// }
-//
-// void UOverlayWidgetController::ManaChanged(const FOnAttributeChangeData& Data) const
-// {
-// 	OnManaChanged.Broadcast(Data.NewValue);
-// }
-//
-// void UOverlayWidgetController::MaxManaChanged(const FOnAttributeChangeData& Data) const
-// {
-// 	OnMaxManaChanged.Broadcast(Data.NewValue);
-// }
+void UOverlayWidgetController::OnInitializeStartupAbilities(UMiniAbilitySystemComponent* MiniAbilitySystemComponent)
+{
+	if(!MiniAbilitySystemComponent->bStartupAbilitiesGiven) return;
+
+	FForEachAbility BroadcastDelegate;
+	BroadcastDelegate.BindLambda([this, MiniAbilitySystemComponent](const FGameplayAbilitySpec& AbilitySpec)
+	{
+		FMiniAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(MiniAbilitySystemComponent->GetAbilityTagFromSpec(AbilitySpec));
+		Info.InputTag = MiniAbilitySystemComponent->GetInputTagFromSpec(AbilitySpec);
+		AbilityInfoDelegate.Broadcast(Info);
+	});
+	MiniAbilitySystemComponent->ForEachAbility(BroadcastDelegate);
+}

@@ -7,7 +7,11 @@
 #include "AbilitySystemComponent.h"
 #include "OverlayWidgetController.generated.h"
 
+class UMiniAbilitySystemComponent;
 class UAbilityInfo;
+class UMiniUserWidget;
+
+struct FMiniAbilityInfo;
 
 USTRUCT(BlueprintType)
 struct FUIWidgetRow : public FTableRowBase
@@ -27,11 +31,9 @@ struct FUIWidgetRow : public FTableRowBase
 	UTexture2D* Image = nullptr;
 };
 
-class UMiniUserWidget;
-
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChangedSignature, float, NewValue);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageWidgetRowSignature, FUIWidgetRow, Row);
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAbilityInfoSignature, const FMiniAbilityInfo&, Info);
 
 /**
  * 
@@ -54,6 +56,8 @@ public:
 	FOnAttributeChangedSignature OnMaxManaChanged;
 	UPROPERTY(BlueprintAssignable, Category="Mini|Message")
 	FMessageWidgetRowSignature MessageWidgetRowDelegate;
+	UPROPERTY(BlueprintAssignable, Category="Mini|Message")
+	FAbilityInfoSignature AbilityInfoDelegate;
 	
 protected:
 
@@ -70,6 +74,7 @@ protected:
 	template<typename T>
 	T* GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag);
 	
+	void OnInitializeStartupAbilities(UMiniAbilitySystemComponent* MiniAbilitySystemComponent);
 };
 
 template <typename T>
