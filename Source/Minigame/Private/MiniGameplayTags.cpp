@@ -165,6 +165,10 @@ void FMiniGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Abilities_Attack = UGameplayTagsManager::Get().AddNativeGameplayTag(
 				FName("Abilities.Attack"),
 			FString("Abilities_Attack"));
+
+	GameplayTags.Abilities_Fire_Bullet = UGameplayTagsManager::Get().AddNativeGameplayTag(
+					FName("Abilities.Fire.Bullet"),
+				FString("Abilities_Fire_Bullet"));
 	
 	/*
 	* Combat sockets

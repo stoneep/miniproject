@@ -7,6 +7,8 @@
 #include "AbilitySystemComponent.h"
 #include "OverlayWidgetController.generated.h"
 
+class UAbilityInfo;
+
 USTRUCT(BlueprintType)
 struct FUIWidgetRow : public FTableRowBase
 {
@@ -62,10 +64,8 @@ protected:
 	TObjectPtr<UDataTable> WidgetDataTable;
 	//new type 
 	
-	// void HealthChanged(const FOnAttributeChangeData& Data) const;
-	// void MaxHealthChanged(const FOnAttributeChangeData& Data) const;
-	// void ManaChanged(const FOnAttributeChangeData& Data) const;
-	// void MaxManaChanged(const FOnAttributeChangeData& Data) const;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Widget Data")
+	TObjectPtr<UAbilityInfo> AbilityInfo;
 
 	template<typename T>
 	T* GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag);
