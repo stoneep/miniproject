@@ -58,6 +58,9 @@ public:
 	FMessageWidgetRowSignature MessageWidgetRowDelegate;
 	UPROPERTY(BlueprintAssignable, Category="Mini|Message")
 	FAbilityInfoSignature AbilityInfoDelegate;
+
+	UPROPERTY(BlueprintAssignable, Category="Mini|XP")
+	FOnAttributeChangedSignature OnXPPercentChangedDelegate;
 	
 protected:
 
@@ -75,6 +78,8 @@ protected:
 	T* GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag);
 	
 	void OnInitializeStartupAbilities(UMiniAbilitySystemComponent* MiniAbilitySystemComponent);
+
+	void OnXPChanged(int32 NewXP) const;
 };
 
 template <typename T>

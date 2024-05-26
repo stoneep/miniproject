@@ -64,7 +64,8 @@ public:
 	FGameplayTag Abilities_Summon;
 
 	FGameplayTag Abilities_Fire_Bullet;
-
+	FGameplayTag Cooldown_Fire_Bullet;
+	
 	FGameplayTag CombatSocket_Weapon;
 	FGameplayTag CombatSocket_RightATK;
 	FGameplayTag CombatSocketLeftATK;

@@ -5,6 +5,8 @@
 #include "AbilitySystem/MiniAbilitySystemComponent.h"
 #include "AbilitySystem/MiniAttributeSet.h"
 #include "AbilitySystem/Data/AbilityInfo.h"
+#include "AbilitySystem/Data/LevelUpInfo.h"
+#include "Player/MiniPlayerState.h"
 
 void UOverlayWidgetController::BroadcastInitialValues()
 {
@@ -18,6 +20,9 @@ void UOverlayWidgetController::BroadcastInitialValues()
 
 void UOverlayWidgetController::BindCallbacksToDependencies()
 {
+	AMiniPlayerState* MiniPlayerState = CastChecked<AMiniPlayerState>(PlayerState);
+	MiniPlayerState->OnLevelChangedDelegate.AddUObject(this, &UOverlayWidgetController::OnXPChanged);
+	
 	const UMiniAttributeSet* MiniAttributeSet = CastChecked<UMiniAttributeSet>(AttributeSet);
 	
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(MiniAttributeSet->GetHealthAttribute()).AddLambda(
@@ -92,4 +97,28 @@ void UOverlayWidgetController::OnInitializeStartupAbilities(UMiniAbilitySystemCo
 		AbilityInfoDelegate.Broadcast(Info);
 	});
 	MiniAbilitySystemComponent->ForEachAbility(BroadcastDelegate);
+}
+
+void UOverlayWidgetController::OnXPChanged(int32 NewXP) const
+{
+	AMiniPlayerState* MiniPlayerState = CastChecked<AMiniPlayerState>(PlayerState);
+	const ULevelUpInfo* LevelUpInfo = MiniPlayerState->LevelUpInfo;
+	checkf(LevelUpInfo, TEXT("Unabled to find LevelUpInfo. Please fill out AuraPlayerState Blueprint"));
+
+	const int32 Level = LevelUpInfo->FindLevelForXP(NewXP);
+	const int32 MaxLevel = LevelUpInfo->LevelUpInformation.Num();
+
+	if (Level <= MaxLevel && Level > 0)
+	{
+		const int32 LevelUpRequirement = LevelUpInfo->LevelUpInformation[Level].LevelUpRequirement;
+		const int32 PreviousLevelUpRequirement = LevelUpInfo->LevelUpInformation[Level - 1].LevelUpRequirement;
+
+		const int32 DeltaLevelRequirement = LevelUpRequirement - PreviousLevelUpRequirement;
+		const int32 XPForThisLevel = NewXP - PreviousLevelUpRequirement;
+
+		const float XPBarPercent = static_cast<float>(XPForThisLevel) / static_cast<float>(DeltaLevelRequirement);
+
+		OnXPPercentChangedDelegate.Broadcast(XPBarPercent);
+	}
+	
 }
