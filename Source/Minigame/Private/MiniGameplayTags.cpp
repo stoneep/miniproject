@@ -138,6 +138,14 @@ void FMiniGameplayTags::InitializeNativeGameplayTags()
 		);
 
 	/*
+	* Meta Attributes
+	*/
+	GameplayTags.Attributes_Meta_IncomingXP = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("Attributes.Meta.IncomingXP"),
+			FString("=IncomingXP")
+			);
+	
+	/*
 	 * Map of Damage Types to Resistances
 	 */
 	GameplayTags.DamageTypesToResistances.Add(GameplayTags.Damage_Arcane, GameplayTags.Attributes_Resistance_Arcane);

@@ -123,6 +123,11 @@ void AMiniCharacterBase::IncremenetMinionCount_Implementation(int32 Amount)
 	MinionCount += Amount;
 }
 
+ECharacterClass AMiniCharacterBase::GetCharacterClass_Implementation()
+{
+	return CharacterClass;
+}
+
 void AMiniCharacterBase::InitAbilityActorInfo()
 {
 }
@@ -150,6 +155,7 @@ void AMiniCharacterBase::AddCharacterAbilities()
 	if (!HasAuthority()) return;
 
 	MiniASC->AddCharacterAbilities(StartupAbilities);
+	MiniASC->AddCharacterAbilities(StartupPassiveAbilities);
 }
 
 void AMiniCharacterBase::Dissolve()

@@ -199,7 +199,11 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Meta Attributes")
 	FGameplayAttributeData IncomingDamage;
 	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, IncomingDamage);
-	
+
+
+	UPROPERTY(BlueprintReadOnly, Category = "Meta Attributes")
+	FGameplayAttributeData IncomingXP;
+	ATTRIBUTE_ACCESSORS(UMiniAttributeSet, IncomingXP);
 	/*
 	* Meta Attributes
 	*/
@@ -273,4 +277,6 @@ private:
 
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
 	void ShowFloatingText(const FEffectProperties& Props, float Damage, bool bCritDMG, bool bEvasion) const;
+	void SendXPEvent(const FEffectProperties& Props);
+	
 };

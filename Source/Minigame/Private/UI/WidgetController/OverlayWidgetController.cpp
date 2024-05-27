@@ -22,6 +22,7 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 {
 	AMiniPlayerState* MiniPlayerState = CastChecked<AMiniPlayerState>(PlayerState);
 	MiniPlayerState->OnLevelChangedDelegate.AddUObject(this, &UOverlayWidgetController::OnXPChanged);
+	MiniPlayerState->OnLevelChangedDelegate.AddLambda([this](int32 NewLevel){OnPlayerLevelChangedDelegate.Broadcast(NewLevel);});
 	
 	const UMiniAttributeSet* MiniAttributeSet = CastChecked<UMiniAttributeSet>(AttributeSet);
 	

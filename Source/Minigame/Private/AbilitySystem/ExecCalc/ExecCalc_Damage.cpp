@@ -89,8 +89,19 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	AActor* SourceAvatar = SourceASC ? SourceASC->GetAvatarActor() : nullptr;
 	AActor* TargetAvatar = TargetASC ? TargetASC->GetAvatarActor() : nullptr;
-	ICombatInterface* SourceCombatInterface = Cast<ICombatInterface>(SourceAvatar);
-	ICombatInterface* TargetCombatInterface = Cast<ICombatInterface>(TargetAvatar);
+
+	int32 SourcePlayerLevel = 1.f;
+	if(SourceAvatar->Implements<UCombatInterface>())
+	{
+		SourcePlayerLevel = ICombatInterface::Execute_GetPlayerLevel(SourceAvatar);
+	}
+	int32 TargetPlayerLevel = 1.f;
+	if(TargetAvatar->Implements<UCombatInterface>())
+	{
+		TargetPlayerLevel = ICombatInterface::Execute_GetPlayerLevel(TargetAvatar);
+	}
+	// ICombatInterface* SourceCombatInterface = Cast<ICombatInterface>(SourceAvatar);
+	// ICombatInterface* TargetCombatInterface = Cast<ICombatInterface>(TargetAvatar);
 	
 	const FGameplayEffectSpec& Spec = ExecutionParams.GetOwningSpec();
 
@@ -154,13 +165,13 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	const UCharacterClassInfo* CharacterClassInfo = UMiniAbilitySystemLibrary::GetCharacterClassInfo(SourceAvatar);
 	const FRealCurve* AccuracyCurve = CharacterClassInfo->DamageCalculationCoefficients->FindCurve(FName("Accuracy"), FString());
-	const float AccuracyPenetrationCoefficient = AccuracyCurve->Eval(SourceCombatInterface->GetPlayerLevel());
+	const float AccuracyPenetrationCoefficient = AccuracyCurve->Eval(SourcePlayerLevel);
 	
 	// Accuracy ignores a percentage of  Target's DEF
 	const float Evasion = TargetDEF *= ( 100 - SourceAccuracy * AccuracyPenetrationCoefficient ) / 100.f;
 
 	const FRealCurve* EvasionCurve = CharacterClassInfo->DamageCalculationCoefficients->FindCurve(FName("Evasion"), FString());
-	const float EvasionCoefficient = EvasionCurve->Eval(TargetCombatInterface->GetPlayerLevel());
+	const float EvasionCoefficient = EvasionCurve->Eval(TargetPlayerLevel);
 	// DEF ignores a percentage of incoming Damage
 	Damage *= ( 100 - Evasion * EvasionCoefficient ) / 100.f;
 	
@@ -182,7 +193,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	TargetStability = FMath::Max<float>(TargetStability, 0.f);
 
 	const FRealCurve* StabilityCurve = CharacterClassInfo->DamageCalculationCoefficients->FindCurve(FName("Stability"), FString());
-	const float StabilityCoefficient = StabilityCurve->Eval(TargetCombatInterface->GetPlayerLevel());
+	const float StabilityCoefficient = StabilityCurve->Eval(TargetPlayerLevel);
 	
 	// Critical Hit Resistance reduces Critical percent by a certain percentage
 	const float Crit = SourceCrit - TargetStability * StabilityCoefficient;

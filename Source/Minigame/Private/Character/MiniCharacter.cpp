@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 //#include "AbilitySystem/MiniAbilitySystemComponent.h"
 #include "AbilitySystem/MiniAttributeSet.h"
+#include "AbilitySystem/Data/LevelUpInfo.h"
 #include "Player/MiniPlayerController.h"
 #include "Player/MiniPlayerState.h"
 #include "UI/HUD/MiniHUD.h"
@@ -29,6 +30,8 @@ AMiniCharacter::AMiniCharacter()
 
 	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
 	HealthBar->SetupAttachment(GetRootComponent());
+
+	CharacterClass = ECharacterClass::Elementalist;
  }
 
 void AMiniCharacter::PossessedBy(AController* NewController)
@@ -62,11 +65,68 @@ void AMiniCharacter::OnRep_PlayerState()
  	InitAbilityActorInfo();
 }
 
-int32 AMiniCharacter::GetPlayerLevel()
+void AMiniCharacter::AddToXP_Implementation(int32 InXP)
+{
+	AMiniPlayerState* MiniPlayerState = GetPlayerState<AMiniPlayerState>();
+	check(MiniPlayerState);
+	MiniPlayerState->AddToXP(InXP);
+}
+
+void AMiniCharacter::LevelUp_Implementation()
+{
+	
+}
+
+int32 AMiniCharacter::GetXP_Implementation() const
+{
+	const AMiniPlayerState* MiniPlayerState = GetPlayerState<AMiniPlayerState>();
+	check(MiniPlayerState);
+	return MiniPlayerState->GetXP();
+}
+
+int32 AMiniCharacter::FindLevelForXP_Implementation(int32 InXP) const
+{
+	const AMiniPlayerState* MiniPlayerState = GetPlayerState<AMiniPlayerState>();
+	check(MiniPlayerState);
+	return MiniPlayerState->LevelUpInfo->FindLevelForXP(InXP);
+}
+
+int32 AMiniCharacter::GetPlayerLevel_Implementation()
 {
 	const AMiniPlayerState* MiniPlayerState = GetPlayerState<AMiniPlayerState>();
 	check(MiniPlayerState);
 	return MiniPlayerState->GetPlayerLevel();
+}
+
+int32 AMiniCharacter::GetAttributePointsReward_Implementation(int32 Level) const
+{
+	const AMiniPlayerState* MiniPlayerState = GetPlayerState<AMiniPlayerState>();
+	check(MiniPlayerState);
+	return MiniPlayerState->LevelUpInfo->LevelUpInformation[Level].AttributePointAward;
+}
+
+int32 AMiniCharacter::GetSkillPointsReward_Implementation(int32 Level) const
+{
+	const AMiniPlayerState* MiniPlayerState = GetPlayerState<AMiniPlayerState>();
+	check(MiniPlayerState);
+	return MiniPlayerState->LevelUpInfo->LevelUpInformation[Level].SkillPointAward;
+}
+
+void AMiniCharacter::AddToPlayerLevel_Implementation(int32 InPlayerLevel)
+{
+	AMiniPlayerState* MiniPlayerState = GetPlayerState<AMiniPlayerState>();
+	check(MiniPlayerState);
+	return MiniPlayerState->AddToLevel(InPlayerLevel);
+}
+
+void AMiniCharacter::AddToAttributePoints_Implementation(int32 InAttributePoints)
+{
+	//
+}
+
+void AMiniCharacter::AddToSkillPoints_Implementation(int32 InSkillPoints)
+{
+	//
 }
 
 void AMiniCharacter::InitAbilityActorInfo()

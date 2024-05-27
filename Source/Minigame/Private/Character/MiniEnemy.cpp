@@ -44,7 +44,7 @@ void AMiniEnemy::PossessedBy(AController* NewController)
 	MiniAIController->GetBlackboardComponent()->SetValueAsBool(FName("RangedAttacker"), CharacterClass != ECharacterClass::Warrior);
 }
 
-int32 AMiniEnemy::GetPlayerLevel()
+int32 AMiniEnemy::GetPlayerLevel_Implementation()
 {
 	return Level;
 }

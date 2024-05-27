@@ -27,6 +27,16 @@ void UMiniAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf
 	AbilitiesGivenDelegate.Broadcast(this);
 }
 
+void UMiniAbilitySystemComponent::AddCharacterPassiveAbilities(
+	const TArray<TSubclassOf<UGameplayAbility>>& StartupPassiveAbilities)
+{
+	for (const TSubclassOf<UGameplayAbility> AbilityClass : StartupPassiveAbilities)
+	{
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
+		GiveAbility(AbilitySpec);
+	}
+}
+
 void UMiniAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag)
 {
 	if (!InputTag.IsValid()) return;

@@ -31,6 +31,7 @@ struct FUIWidgetRow : public FTableRowBase
 	UTexture2D* Image = nullptr;
 };
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerStatChangedSignature, int32, NewValue);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChangedSignature, float, NewValue);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageWidgetRowSignature, FUIWidgetRow, Row);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAbilityInfoSignature, const FMiniAbilityInfo&, Info);
@@ -46,6 +47,7 @@ class MINIGAME_API UOverlayWidgetController : public UMiniWidgetController
 public:
 	virtual void BroadcastInitialValues() override;
 	virtual void BindCallbacksToDependencies() override;
+	
 	UPROPERTY(BlueprintAssignable, Category="Mini|Attributes")
 	FOnAttributeChangedSignature OnHealthChanged;
 	UPROPERTY(BlueprintAssignable, Category="Mini|Attributes")
@@ -54,6 +56,7 @@ public:
 	FOnAttributeChangedSignature OnManaChanged;
 	UPROPERTY(BlueprintAssignable, Category="Mini|Attributes")
 	FOnAttributeChangedSignature OnMaxManaChanged;
+	
 	UPROPERTY(BlueprintAssignable, Category="Mini|Message")
 	FMessageWidgetRowSignature MessageWidgetRowDelegate;
 	UPROPERTY(BlueprintAssignable, Category="Mini|Message")
@@ -61,6 +64,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category="Mini|XP")
 	FOnAttributeChangedSignature OnXPPercentChangedDelegate;
+
+	UPROPERTY(BlueprintAssignable, Category="Mini|Level")
+	FOnPlayerStatChangedSignature OnPlayerLevelChangedDelegate;
 	
 protected:
 
