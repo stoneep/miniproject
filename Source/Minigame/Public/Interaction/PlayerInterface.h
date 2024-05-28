@@ -45,7 +45,7 @@ public:
 	void AddToAttributePoints(int32 InAttributePoints);
 
 	UFUNCTION(BlueprintNativeEvent)
-	void AddToSkillPoints(int32 InSpellPoints);
+	void AddToSkillPoints(int32 InSkillPoints);
 
 	UFUNCTION(BlueprintNativeEvent)
 	void LevelUp();

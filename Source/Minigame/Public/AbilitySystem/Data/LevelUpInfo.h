@@ -10,7 +10,7 @@ USTRUCT(BlueprintType)
 struct FMiniLevelUpInfo
 {
 	GENERATED_BODY()
-
+	
 	UPROPERTY(EditDefaultsOnly)
 	int32 LevelUpRequirement = 0;
 	

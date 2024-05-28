@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UI/WidgetController/MiniWidgetController.h"
-#include "AbilitySystemComponent.h"
+//#include "AbilitySystemComponent.h"
 #include "OverlayWidgetController.generated.h"
 
 class UMiniAbilitySystemComponent;
@@ -17,16 +17,16 @@ USTRUCT(BlueprintType)
 struct FUIWidgetRow : public FTableRowBase
 {
 	GENERATED_BODY()
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FGameplayTag MessageTag = FGameplayTag();
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FText Message = FText();
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<class UMiniUserWidget> MessageWidget;
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UTexture2D* Image = nullptr;
 };
@@ -57,11 +57,11 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="Mini|Attributes")
 	FOnAttributeChangedSignature OnMaxManaChanged;
 	
-	UPROPERTY(BlueprintAssignable, Category="Mini|Message")
+	UPROPERTY(BlueprintAssignable, Category="Mini|Messages")
 	FMessageWidgetRowSignature MessageWidgetRowDelegate;
-	UPROPERTY(BlueprintAssignable, Category="Mini|Message")
+	UPROPERTY(BlueprintAssignable, Category="Mini|Messages")
 	FAbilityInfoSignature AbilityInfoDelegate;
-
+	
 	UPROPERTY(BlueprintAssignable, Category="Mini|XP")
 	FOnAttributeChangedSignature OnXPPercentChangedDelegate;
 

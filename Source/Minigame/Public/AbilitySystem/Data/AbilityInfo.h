@@ -11,16 +11,16 @@ USTRUCT(BlueprintType)
 struct FMiniAbilityInfo
 {
 	GENERATED_BODY()
-
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FGameplayTag AbilityTag = FGameplayTag();
+	
+	UPROPERTY(BlueprintReadOnly)
+	FGameplayTag InputTag = FGameplayTag();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FGameplayTag InputTag = FGameplayTag();
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FGameplayTag ColldownTag = FGameplayTag();
-	
+	FGameplayTag CooldownTag = FGameplayTag();
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<const UTexture2D> Icon = nullptr;
 
@@ -38,8 +38,8 @@ class MINIGAME_API UAbilityInfo : public UDataAsset
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="AbilityInformation")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "AbilityInformation")
 	TArray<FMiniAbilityInfo> AbilityInformation;
-
+	
 	FMiniAbilityInfo FindAbilityInfoForTag(const FGameplayTag& AbilityTag, bool bLogNotFound = false) const;
 };

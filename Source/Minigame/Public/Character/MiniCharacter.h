@@ -10,6 +10,9 @@
 #include "MiniCharacter.generated.h"
 
 class UWidgetComponent;
+class UNiagaraComponent;
+class UCameraComponent;
+class USpringArmComponent;
 
 UENUM(BlueprintType)
 enum class EMovementState : uint8
@@ -37,12 +40,13 @@ public:
 	virtual void LevelUp_Implementation() override;
 	virtual int32 GetXP_Implementation() const override;
 	virtual int32 FindLevelForXP_Implementation(int32 InXP) const override;
-	virtual int32 GetPlayerLevel_Implementation() override;
 	virtual int32 GetAttributePointsReward_Implementation(int32 Level) const override;
 	virtual int32 GetSkillPointsReward_Implementation(int32 Level) const override;
 	virtual void AddToPlayerLevel_Implementation(int32 InPlayerLevel) override;
 	virtual void AddToAttributePoints_Implementation(int32 InAttributePoints) override;
 	virtual void AddToSkillPoints_Implementation(int32 InSkillPoints) override;
+	
+	virtual int32 GetPlayerLevel_Implementation() override;
 	
 	UPROPERTY(BlueprintAssignable)
 	FOnAttributeChangedSignature OnHealthChanged;
@@ -56,8 +60,21 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void UpdateMovementState();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UNiagaraComponent> LevelUpNiagaraComponent;
+	
 private:
 	virtual void InitAbilityActorInfo() override;
+	
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UCameraComponent> TopDownCameraComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USpringArmComponent> CameraBoom;
+	
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastLevelUpParticles() const;
+
 
 protected:
 

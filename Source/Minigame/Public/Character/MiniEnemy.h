@@ -29,6 +29,7 @@ public:
 	virtual void Die() override;
 	virtual void SetCombatTarget_Implementation(AActor* InCombatTarget) override;
 	virtual AActor* GetCombatTarget_Implementation() const override;
+	
 	UPROPERTY(BlueprintAssignable)
 	FOnAttributeChangedSignature OnHealthChanged;
 
@@ -36,7 +37,7 @@ public:
 	FOnAttributeChangedSignature OnMaxHealthChanged;
 
 	void HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
-	//void DieReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount);
+	//void DieReactTagChanged(const FGameplayTag CallRemoveTag, int32 NewCount);
 
 	UPROPERTY(BlueprintReadOnly, Category="Combat")
 	bool bHitReacting = false;

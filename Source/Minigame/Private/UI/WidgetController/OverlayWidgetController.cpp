@@ -73,8 +73,8 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 					FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
 					if (Tag.MatchesTag(MessageTag))
 					{
-					const FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
-					MessageWidgetRowDelegate.Broadcast(*Row);
+						const FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
+						MessageWidgetRowDelegate.Broadcast(*Row);
 					}
 				
 				}
@@ -89,7 +89,7 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 void UOverlayWidgetController::OnInitializeStartupAbilities(UMiniAbilitySystemComponent* MiniAbilitySystemComponent)
 {
 	if(!MiniAbilitySystemComponent->bStartupAbilitiesGiven) return;
-
+	
 	FForEachAbility BroadcastDelegate;
 	BroadcastDelegate.BindLambda([this, MiniAbilitySystemComponent](const FGameplayAbilitySpec& AbilitySpec)
 	{
@@ -102,9 +102,9 @@ void UOverlayWidgetController::OnInitializeStartupAbilities(UMiniAbilitySystemCo
 
 void UOverlayWidgetController::OnXPChanged(int32 NewXP) const
 {
-	AMiniPlayerState* MiniPlayerState = CastChecked<AMiniPlayerState>(PlayerState);
+	const AMiniPlayerState* MiniPlayerState = CastChecked<AMiniPlayerState>(PlayerState);
 	const ULevelUpInfo* LevelUpInfo = MiniPlayerState->LevelUpInfo;
-	checkf(LevelUpInfo, TEXT("Unabled to find LevelUpInfo. Please fill out AuraPlayerState Blueprint"));
+	checkf(LevelUpInfo, TEXT("Unabled to find LevelUpInfo. Please fill out MiniPlayerState Blueprint"));
 
 	const int32 Level = LevelUpInfo->FindLevelForXP(NewXP);
 	const int32 MaxLevel = LevelUpInfo->LevelUpInformation.Num();

@@ -5,18 +5,32 @@
 
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/MiniAbilitySystemComponent.h"
-//#include "AbilitySystem/MiniAttributeSet.h"
 #include "GameFramework/CharacterMovementComponent.h"
-//#include "AbilitySystem/MiniAbilitySystemComponent.h"
 #include "AbilitySystem/MiniAttributeSet.h"
 #include "AbilitySystem/Data/LevelUpInfo.h"
 #include "Player/MiniPlayerController.h"
 #include "Player/MiniPlayerState.h"
 #include "UI/HUD/MiniHUD.h"
+#include "NiagaraComponent.h"
+// #include "Camera/CameraComponent.h"
+// #include "GameFramework/SpringArmComponent.h"
 #include "UI/Widget/MiniUserWidget.h"
 
 AMiniCharacter::AMiniCharacter()
  {
+	// CameraBoom = CreateDefaultSubobject<USpringArmComponent>("CameraBoom");
+	// CameraBoom->SetupAttachment(GetRootComponent());
+	// CameraBoom->SetUsingAbsoluteRotation(true);
+	// CameraBoom->bDoCollisionTest = false;
+	// //
+	// TopDownCameraComponent = CreateDefaultSubobject<UCameraComponent>("TopDownCameraComponent");
+	// TopDownCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	// TopDownCameraComponent->bUsePawnControlRotation = false;
+
+	LevelUpNiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>("LevelUpNiagaraComponent");
+	LevelUpNiagaraComponent->SetupAttachment(GetRootComponent());
+	LevelUpNiagaraComponent->bAutoActivate = false;
+	
  	GetCharacterMovement()->bOrientRotationToMovement = true;
  	GetCharacterMovement()->RotationRate = FRotator(0.f, 600.f, 0.f);
  	GetCharacterMovement()->bConstrainToPlane = true;
@@ -74,7 +88,19 @@ void AMiniCharacter::AddToXP_Implementation(int32 InXP)
 
 void AMiniCharacter::LevelUp_Implementation()
 {
-	
+	MulticastLevelUpParticles();
+}
+
+void AMiniCharacter::MulticastLevelUpParticles_Implementation() const
+{
+	if (IsValid(LevelUpNiagaraComponent))
+	{
+		// const FVector CameraLocation = TopDownCameraComponent->GetComponentLocation();
+		// const FVector NiagaraSystemLocation = LevelUpNiagaraComponent->GetComponentLocation();
+		// const FRotator ToCameraRotation = (CameraLocation - NiagaraSystemLocation).Rotation();
+		// LevelUpNiagaraComponent->SetWorldRotation(ToCameraRotation);
+		LevelUpNiagaraComponent->Activate(true);
+	}
 }
 
 int32 AMiniCharacter::GetXP_Implementation() const
@@ -89,13 +115,6 @@ int32 AMiniCharacter::FindLevelForXP_Implementation(int32 InXP) const
 	const AMiniPlayerState* MiniPlayerState = GetPlayerState<AMiniPlayerState>();
 	check(MiniPlayerState);
 	return MiniPlayerState->LevelUpInfo->FindLevelForXP(InXP);
-}
-
-int32 AMiniCharacter::GetPlayerLevel_Implementation()
-{
-	const AMiniPlayerState* MiniPlayerState = GetPlayerState<AMiniPlayerState>();
-	check(MiniPlayerState);
-	return MiniPlayerState->GetPlayerLevel();
 }
 
 int32 AMiniCharacter::GetAttributePointsReward_Implementation(int32 Level) const
@@ -116,7 +135,7 @@ void AMiniCharacter::AddToPlayerLevel_Implementation(int32 InPlayerLevel)
 {
 	AMiniPlayerState* MiniPlayerState = GetPlayerState<AMiniPlayerState>();
 	check(MiniPlayerState);
-	return MiniPlayerState->AddToLevel(InPlayerLevel);
+	MiniPlayerState->AddToLevel(InPlayerLevel);
 }
 
 void AMiniCharacter::AddToAttributePoints_Implementation(int32 InAttributePoints)
@@ -129,15 +148,21 @@ void AMiniCharacter::AddToSkillPoints_Implementation(int32 InSkillPoints)
 	//
 }
 
+int32 AMiniCharacter::GetPlayerLevel_Implementation()
+{
+	const AMiniPlayerState* MiniPlayerState = GetPlayerState<AMiniPlayerState>();
+	check(MiniPlayerState);
+	return MiniPlayerState->GetPlayerLevel();
+}
+
 void AMiniCharacter::InitAbilityActorInfo()
 {
- 	AMiniPlayerState* MiniPlayerState = GetPlayerState<AMiniPlayerState>();
- 	check(MiniPlayerState);
- 	MiniPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(MiniPlayerState, this);
+	AMiniPlayerState* MiniPlayerState = GetPlayerState<AMiniPlayerState>();
+	check(MiniPlayerState);
+	MiniPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(MiniPlayerState, this);
 	Cast<UMiniAbilitySystemComponent>(MiniPlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
- 	AbilitySystemComponent = MiniPlayerState->GetAbilitySystemComponent();
- 	AttributeSet = MiniPlayerState->GetAttributeSet();
-
+	AbilitySystemComponent = MiniPlayerState->GetAbilitySystemComponent();
+	AttributeSet = MiniPlayerState->GetAttributeSet();
 	if (AMiniPlayerController* MiniPlayerController = Cast<AMiniPlayerController>(GetController()))
 	{
 		if (AMiniHUD* MiniHUD = Cast<AMiniHUD>(MiniPlayerController->GetHUD()))
@@ -156,7 +181,6 @@ void AMiniCharacter::BeginPlay()
 	{
 		MiniUserWidget->SetWidgetController(this);
 	}
-
 	if (const UMiniAttributeSet* MiniAS = Cast<UMiniAttributeSet>(AttributeSet))
 	{
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(MiniAS->GetHealthAttribute()).AddLambda(

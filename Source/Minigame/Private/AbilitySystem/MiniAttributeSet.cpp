@@ -197,26 +197,27 @@ void UMiniAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	{
 		const float LocalIncomingXP = GetIncomingXP();
 		SetIncomingXP(0.f);
-
-		if(Props.SourceCharacter->Implements<UPlayerInterface>() && Props.SourceCharacter->Implements<UCombatInterface>())
+		UE_LOG(LogMini, Log, TEXT("Incoming XP: %f"), LocalIncomingXP);
+		
+		if (Props.SourceCharacter->Implements<UPlayerInterface>() && Props.SourceCharacter->Implements<UCombatInterface>())
 		{
 			const int32 CurrentLevel = ICombatInterface::Execute_GetPlayerLevel(Props.SourceCharacter);
 			const int32 CurrentXP = IPlayerInterface::Execute_GetXP(Props.SourceCharacter);
 
 			const int32 NewLevel = IPlayerInterface::Execute_FindLevelForXP(Props.SourceCharacter, CurrentXP + LocalIncomingXP);
 			const int32 NumLevelUps = NewLevel - CurrentLevel;
-			if(NumLevelUps > 0)
+			if (NumLevelUps > 0)
 			{
 				const int32 AttributePointsReward = IPlayerInterface::Execute_GetAttributePointsReward(Props.SourceCharacter, CurrentLevel);
 				const int32 SkillPointsReward = IPlayerInterface::Execute_GetSkillPointsReward(Props.SourceCharacter, CurrentLevel);
-				
+
 				IPlayerInterface::Execute_AddToPlayerLevel(Props.SourceCharacter, NumLevelUps);
 				IPlayerInterface::Execute_AddToAttributePoints(Props.SourceCharacter, AttributePointsReward);
 				IPlayerInterface::Execute_AddToSkillPoints(Props.SourceCharacter, SkillPointsReward);
 
 				SetHealth(GetMaxHealth());
-				SetMana(GetMaxMana()); //
-				
+				SetMana(GetMaxMana());
+
 				IPlayerInterface::Execute_LevelUp(Props.SourceCharacter);
 			}
 			
@@ -248,7 +249,6 @@ void UMiniAttributeSet::SendXPEvent(const FEffectProperties& Props)
 		const int32 TargetLevel = ICombatInterface::Execute_GetPlayerLevel(Props.TargetCharacter);
 		const ECharacterClass TargetClass = ICombatInterface::Execute_GetCharacterClass(Props.TargetCharacter);
 		const int32 XPReward = UMiniAbilitySystemLibrary::GetXPRewardForClassAndLevel(Props.TargetCharacter, TargetClass, TargetLevel);
-
 		const FMiniGameplayTags& GameplayTags = FMiniGameplayTags::Get();
 		FGameplayEventData Payload;
 		Payload.EventTag = GameplayTags.Attributes_Meta_IncomingXP;

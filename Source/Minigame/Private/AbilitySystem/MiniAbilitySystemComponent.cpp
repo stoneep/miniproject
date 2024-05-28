@@ -33,7 +33,7 @@ void UMiniAbilitySystemComponent::AddCharacterPassiveAbilities(
 	for (const TSubclassOf<UGameplayAbility> AbilityClass : StartupPassiveAbilities)
 	{
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
-		GiveAbility(AbilitySpec);
+		GiveAbilityAndActivateOnce(AbilitySpec);
 	}
 }
 
@@ -72,14 +72,14 @@ void UMiniAbilitySystemComponent::ForEachAbility(const FForEachAbility& Delegate
 	{
 		if (!Delegate.ExecuteIfBound(AbilitySpec))
 		{
-			UE_LOG(LogMini, Error, TEXT("Failled to execute Delegate in %hs"), __FUNCTION__);
+			UE_LOG(LogMini, Error, TEXT("Failed to execute delegate in %hs"), __FUNCTION__);
 		}
 	}
 }
 
 FGameplayTag UMiniAbilitySystemComponent::GetAbilityTagFromSpec(const FGameplayAbilitySpec& AbilitySpec)
 {
-	if(AbilitySpec.Ability)
+	if (AbilitySpec.Ability)
 	{
 		for (FGameplayTag Tag : AbilitySpec.Ability.Get()->AbilityTags)
 		{
@@ -94,9 +94,9 @@ FGameplayTag UMiniAbilitySystemComponent::GetAbilityTagFromSpec(const FGameplayA
 
 FGameplayTag UMiniAbilitySystemComponent::GetInputTagFromSpec(const FGameplayAbilitySpec& AbilitySpec)
 {
-	for(FGameplayTag Tag : AbilitySpec.DynamicAbilityTags)
+	for (FGameplayTag Tag : AbilitySpec.DynamicAbilityTags)
 	{
-		if(Tag.MatchesTag(FGameplayTag::RequestGameplayTag(FName("InputTag"))))
+		if (Tag.MatchesTag(FGameplayTag::RequestGameplayTag(FName("InputTag"))))
 		{
 			return Tag;
 		}
@@ -107,7 +107,7 @@ FGameplayTag UMiniAbilitySystemComponent::GetInputTagFromSpec(const FGameplayAbi
 void UMiniAbilitySystemComponent::OnRep_ActivateAbilities()
 {
 	Super::OnRep_ActivateAbilities();
-
+	
 	if (!bStartupAbilitiesGiven)
 	{
 		bStartupAbilitiesGiven = true;
@@ -119,6 +119,6 @@ void UMiniAbilitySystemComponent::ClientEffectApplied_Implementation(UAbilitySys
 {
 	FGameplayTagContainer TagContainer;
 	EffectSpec.GetAllAssetTags(TagContainer);
-
+	
 	EffectAssetTags.Broadcast(TagContainer);
 }

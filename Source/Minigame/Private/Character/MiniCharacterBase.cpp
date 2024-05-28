@@ -36,7 +36,7 @@ UAnimMontage* AMiniCharacterBase::GetHitReactMontage_Implementation()
 
 void AMiniCharacterBase::Die()
 {
-	
+	//Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld, true));
 	MulticastHandleDeath();
 }
 
@@ -107,10 +107,11 @@ FTaggedMontage AMiniCharacterBase::GetTaggedMontageByTag_Implementation(const FG
 	for (FTaggedMontage TaggedMontage : AttackMontages)
 	{
 		if (TaggedMontage.MontageTag == MontageTag)
+		{
 			return TaggedMontage;
+		}
 	}
 	return FTaggedMontage();
-
 }
 
 int32 AMiniCharacterBase::GetMinionCount_Implementation()
@@ -155,7 +156,7 @@ void AMiniCharacterBase::AddCharacterAbilities()
 	if (!HasAuthority()) return;
 
 	MiniASC->AddCharacterAbilities(StartupAbilities);
-	MiniASC->AddCharacterAbilities(StartupPassiveAbilities);
+	MiniASC->AddCharacterPassiveAbilities(StartupPassiveAbilities);
 }
 
 void AMiniCharacterBase::Dissolve()

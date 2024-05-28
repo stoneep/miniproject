@@ -138,7 +138,11 @@ void AMiniEnemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	Cast<UMiniAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
-	InitializeDefaultAttributes();
+	
+	if (HasAuthority())
+	{
+		InitializeDefaultAttributes();		
+	}
 }
 
 void AMiniEnemy::InitializeDefaultAttributes() const

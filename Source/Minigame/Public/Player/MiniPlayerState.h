@@ -44,7 +44,7 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
-
+	
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
 	
@@ -52,7 +52,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere, ReplicatedUsing=OnRep_Level)
 	int32 Level = 1;
-
+	
 	UPROPERTY(VisibleAnywhere, ReplicatedUsing=OnRep_XP)
 	int32 XP = 1;
 	
