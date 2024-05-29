@@ -25,7 +25,10 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category="Mini|Attributes")
 	FAttributeInfoSignature AttributeInfoDelegate;
-
+	
+	UPROPERTY(BlueprintAssignable, Category="Mini|Attributes")
+	FOnPlayerStatChangedSignature AttributePointsChangedDelegate;
+	
 protected:
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UAttributeInfo> AttributeInfo;

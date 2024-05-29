@@ -22,6 +22,8 @@ void AMiniPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 
 	DOREPLIFETIME(AMiniPlayerState, Level);
 	DOREPLIFETIME(AMiniPlayerState, XP);
+	DOREPLIFETIME(AMiniPlayerState, AttributePoints);
+	DOREPLIFETIME(AMiniPlayerState, SkillPoints);
 }
 
 UAbilitySystemComponent* AMiniPlayerState::GetAbilitySystemComponent() const
@@ -61,4 +63,25 @@ void AMiniPlayerState::OnRep_Level(int32 OldLevel)
 void AMiniPlayerState::OnRep_XP(int32 OldXP)
 {
 	OnXPChangedDelegate.Broadcast(XP);
+}
+void AMiniPlayerState::OnRep_AttributePoints(int32 OldAttributePoints)
+{
+	OnAttributePointsChangedDelegate.Broadcast(AttributePoints);
+}
+
+void AMiniPlayerState::OnRep_SkillPoints(int32 OldSkillPoints)
+{
+	OnSkillPointsChangedDelegate.Broadcast(SkillPoints);
+}
+
+void AMiniPlayerState::AddToAttributePoints(int32 InPoints)
+{
+	AttributePoints += InPoints;
+	OnAttributePointsChangedDelegate.Broadcast(AttributePoints);
+}
+
+void AMiniPlayerState::AddToSkillPoints(int32 InPoints)
+{
+	SkillPoints += InPoints;
+	OnSkillPointsChangedDelegate.Broadcast(SkillPoints);
 }

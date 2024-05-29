@@ -6,6 +6,7 @@
 #include "MiniGameplayTags.h"
 #include "AbilitySystem/MiniAttributeSet.h"
 #include "AbilitySystem/Data/AttributeInfo.h"
+#include "Player/MiniPlayerState.h"
 
 void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 {
@@ -20,6 +21,13 @@ void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 			}
 		);
 	}
+	AMiniPlayerState* MiniPlayerState = CastChecked<AMiniPlayerState>(PlayerState);
+	MiniPlayerState->OnAttributePointsChangedDelegate.AddLambda(
+		[this](int32 Points)
+		{
+			AttributePointsChangedDelegate.Broadcast(Points);
+		}
+	);
 }
 
 void UAttributeMenuWidgetController::BroadcastInitialValues()
