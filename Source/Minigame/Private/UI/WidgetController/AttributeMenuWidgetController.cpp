@@ -4,6 +4,7 @@
 #include "UI/WidgetController/AttributeMenuWidgetController.h"
 
 #include "MiniGameplayTags.h"
+#include "AbilitySystem/MiniAbilitySystemComponent.h"
 #include "AbilitySystem/MiniAttributeSet.h"
 #include "AbilitySystem/Data/AttributeInfo.h"
 #include "Player/MiniPlayerState.h"
@@ -40,14 +41,19 @@ void UAttributeMenuWidgetController::BroadcastInitialValues()
 	{
 		BroadcastAttributeInfo(Pair.Key, Pair.Value());
 
-		// FMiniAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(Pair.Key);
-		// Info.AttributeValue = Pair.Value().GetNumericValue(AS);
-		// AttributeInfoDelegate.Broadcast(Info);
+		AMiniPlayerState* MiniPlayerState = CastChecked<AMiniPlayerState>(PlayerState);
+		AttributePointsChangedDelegate.Broadcast(MiniPlayerState->GetAttributePoints());
 	}
 }
 
+void UAttributeMenuWidgetController::UpgradeAttribute(const FGameplayTag& AttributeTag)
+{
+	UMiniAbilitySystemComponent* MiniASC = CastChecked<UMiniAbilitySystemComponent>(AbilitySystemComponent);
+	MiniASC->UpgradeAttribute(AttributeTag);
+}
+
 void UAttributeMenuWidgetController::BroadcastAttributeInfo(const FGameplayTag& AttributeTag,
-	const FGameplayAttribute& Attribute) const
+                                                            const FGameplayAttribute& Attribute) const
 {
 	FMiniAttributeInfo Info = AttributeInfo->FindAttributeInfoForTag(AttributeTag);
 	Info.AttributeValue = Attribute.GetNumericValue(AttributeSet);

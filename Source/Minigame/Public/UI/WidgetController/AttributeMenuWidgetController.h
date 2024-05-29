@@ -8,6 +8,8 @@
 
 class UAttributeInfo;
 struct FMiniAttributeInfo;
+struct FGameplayTag;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAttributeInfoSignature, const FMiniAttributeInfo&, Info);
 
 /**
@@ -28,6 +30,9 @@ public:
 	
 	UPROPERTY(BlueprintAssignable, Category="Mini|Attributes")
 	FOnPlayerStatChangedSignature AttributePointsChangedDelegate;
+
+	UFUNCTION(BlueprintCallable)
+	void UpgradeAttribute(const FGameplayTag& AttributeTag);
 	
 protected:
 	UPROPERTY(EditDefaultsOnly)

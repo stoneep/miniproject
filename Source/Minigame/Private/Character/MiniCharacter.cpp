@@ -140,12 +140,30 @@ void AMiniCharacter::AddToPlayerLevel_Implementation(int32 InPlayerLevel)
 
 void AMiniCharacter::AddToAttributePoints_Implementation(int32 InAttributePoints)
 {
-	//
+	AMiniPlayerState* MiniPlayerState = GetPlayerState<AMiniPlayerState>();
+	check(MiniPlayerState);
+	MiniPlayerState->AddToAttributePoints(InAttributePoints);
 }
 
 void AMiniCharacter::AddToSkillPoints_Implementation(int32 InSkillPoints)
 {
-	//
+	AMiniPlayerState* MiniPlayerState = GetPlayerState<AMiniPlayerState>();
+	check(MiniPlayerState);
+	MiniPlayerState->AddToSkillPoints(InSkillPoints);
+}
+
+int32 AMiniCharacter::GetAttributePoints_Implementation() const
+{
+	AMiniPlayerState* MiniPlayerState = GetPlayerState<AMiniPlayerState>();
+	check(MiniPlayerState);
+	return MiniPlayerState->GetAttributePoints();
+}
+
+int32 AMiniCharacter::GetSkillPoints_Implementation() const
+{
+	AMiniPlayerState* MiniPlayerState = GetPlayerState<AMiniPlayerState>();
+	check(MiniPlayerState);
+	return MiniPlayerState->GetSkillPoints();
 }
 
 int32 AMiniCharacter::GetPlayerLevel_Implementation()

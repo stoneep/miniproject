@@ -3,9 +3,11 @@
 
 #include "AbilitySystem/MiniAbilitySystemComponent.h"
 
-#include "MiniGameplayTags.h"
+//#include "MiniGameplayTags.h"
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystem/Abilities/MiniGameplayAbility.h"
 #include "Minigame/MiniLogChannels.h"
+#include "Interaction/PlayerInterface.h"
 
 void UMiniAbilitySystemComponent::AbilityActorInfoSet()
 {
@@ -102,6 +104,31 @@ FGameplayTag UMiniAbilitySystemComponent::GetInputTagFromSpec(const FGameplayAbi
 		}
 	}
 	return FGameplayTag();
+}
+
+void UMiniAbilitySystemComponent::UpgradeAttribute(const FGameplayTag& AttributeTag)
+{
+	if (GetAvatarActor()->Implements<UPlayerInterface>())
+	{
+		if (IPlayerInterface::Execute_GetAttributePoints(GetAvatarActor()) > 0)
+		{
+			ServerUpgradeAttribute(AttributeTag);
+		}
+	}
+}
+
+void UMiniAbilitySystemComponent::ServerUpgradeAttribute_Implementation(const FGameplayTag& AttributeTag)
+{
+	FGameplayEventData Payload;
+	Payload.EventTag = AttributeTag;
+	Payload.EventMagnitude = 1.f;
+
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(GetAvatarActor(), AttributeTag, Payload);
+
+	if (GetAvatarActor()->Implements<UPlayerInterface>())
+	{
+		IPlayerInterface::Execute_AddToAttributePoints(GetAvatarActor(), -1);
+	}
 }
 
 void UMiniAbilitySystemComponent::OnRep_ActivateAbilities()
