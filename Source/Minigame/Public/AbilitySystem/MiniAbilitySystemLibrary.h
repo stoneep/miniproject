@@ -7,9 +7,11 @@
 #include "Data/CharacterClassInfo.h"
 #include "MiniAbilitySystemLibrary.generated.h"
 
+class USkillMenuWidgetController;
 class UAbilitySystemComponent;
 class UAttributeMenuWidgetController;
 class UOverlayWidgetController;
+struct FWidgetControllerParams;
 /**
  * 
  */
@@ -20,12 +22,18 @@ class MINIGAME_API UMiniAbilitySystemLibrary : public UBlueprintFunctionLibrary
 
 public:
 
-	UFUNCTION(BlueprintPure, Category="MiniAbilitySystemLibrary|WidgetController")
+	UFUNCTION(BlueprintPure, Category="MiniAbilitySystemLibrary|WidgetController", meta = (DefaultToSelf = "WorldContextObject"))
+	static bool MakeWidgetControllerParams(const UObject* WorldContextObject, FWidgetControllerParams& OutWCParams, AMiniHUD*& OutAuraHUD);
+
+	UFUNCTION(BlueprintPure, Category="MiniAbilitySystemLibrary|WidgetController", meta = (DefaultToSelf = "WorldContextObject"))
 	static UOverlayWidgetController* GetOverlayWidgetController(const UObject* WorldContextObject);
 
-	UFUNCTION(BlueprintPure, Category="MiniAbilitySystemLibrary|WidgetController")
+	UFUNCTION(BlueprintPure, Category="MiniAbilitySystemLibrary|WidgetController", meta = (DefaultToSelf = "WorldContextObject"))
 	static UAttributeMenuWidgetController* GetAttributeMenuWidgetController(const UObject* WorldContextObject);
-
+	
+	UFUNCTION(BlueprintPure, Category="MiniAbilitySystemLibrary|WidgetController", meta = (DefaultToSelf = "WorldContextObject"))
+	static USkillMenuWidgetController* GetSkillMenuWidgetController(const UObject* WorldContextObject);
+	
 	UFUNCTION(BlueprintCallable, Category="MiniAbilitySystemLibrary|CharacterClassDefaults")
 	static void InitializeDefaultAttributes(const UObject* WorldContextObject, ECharacterClass CharacterClass, float Level, UAbilitySystemComponent* ASC);
 	

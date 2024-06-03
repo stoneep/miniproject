@@ -5,7 +5,7 @@
 #include "UI/WidgetController/OverlayWidgetController.h"
 #include "UI/WidgetController/AttributeMenuWidgetController.h"
 #include "UI/Widget/MiniUserWidget.h"
-
+#include "UI/WidgetController/SkillMenuWidgetController.h"
 
 UOverlayWidgetController* AMiniHUD::GetOverlayWidgetController(const FWidgetControllerParams& WCParams)
 {
@@ -28,6 +28,17 @@ UAttributeMenuWidgetController* AMiniHUD::GetAttributeMenuWidgetController(const
 		AttributeMenuWidgetController->BindCallbacksToDependencies();
 	}
 	return AttributeMenuWidgetController;
+}
+
+USkillMenuWidgetController* AMiniHUD::GetSkillMenuWidgetController(const FWidgetControllerParams& WCParams)
+{
+	if (SkillMenuWidgetController == nullptr)
+	{
+		SkillMenuWidgetController = NewObject<USkillMenuWidgetController>(this, SkillMenuWidgetControllerClass);
+		SkillMenuWidgetController->SetWidgetControllerParams(WCParams);
+		SkillMenuWidgetController->BindCallbacksToDependencies();
+	}
+	return SkillMenuWidgetController;
 }
 
 void AMiniHUD::InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS)

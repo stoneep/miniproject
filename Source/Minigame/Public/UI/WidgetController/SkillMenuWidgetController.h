@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class MINIGAME_API USkillMenuWidgetController : public UMiniWidgetController
 {
 	GENERATED_BODY()

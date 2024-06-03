@@ -11,18 +11,34 @@
 #include "Player/MiniPlayerState.h"
 #include "UI/HUD/MiniHUD.h"
 
-UOverlayWidgetController* UMiniAbilitySystemLibrary::GetOverlayWidgetController(const UObject* WorldContextObject)
+bool UMiniAbilitySystemLibrary::MakeWidgetControllerParams(const UObject* WorldContextObject, FWidgetControllerParams& OutWCParams, AMiniHUD*& OutMiniHUD)
 {
 	if (APlayerController* PC = UGameplayStatics::GetPlayerController(WorldContextObject, 0))
 	{
-		if (AMiniHUD* MiniHUD = Cast<AMiniHUD>(PC->GetHUD()))
+		OutMiniHUD = Cast<AMiniHUD>(PC->GetHUD());
+		if (OutMiniHUD)
 		{
 			AMiniPlayerState* PS = PC->GetPlayerState<AMiniPlayerState>();
 			UAbilitySystemComponent* ASC = PS->GetAbilitySystemComponent();
 			UAttributeSet* AS = PS->GetAttributeSet();
-			const FWidgetControllerParams WidgetControllerParams(PC, PS, ASC, AS);
-			return MiniHUD->GetOverlayWidgetController(WidgetControllerParams);
+
+			OutWCParams.AttributeSet = AS;
+			OutWCParams.AbilitySystemComponent = ASC;
+			OutWCParams.PlayerState = PS;
+			OutWCParams.PlayerController = PC;
+			return true;
 		}
+	}
+	return false;
+}
+
+UOverlayWidgetController* UMiniAbilitySystemLibrary::GetOverlayWidgetController(const UObject* WorldContextObject)
+{
+	FWidgetControllerParams WCParams;
+	AMiniHUD* MiniHUD = nullptr;
+	if (MakeWidgetControllerParams(WorldContextObject, WCParams, MiniHUD))
+	{
+		return MiniHUD->GetOverlayWidgetController(WCParams);
 	}
 	return nullptr;
 }
@@ -30,16 +46,22 @@ UOverlayWidgetController* UMiniAbilitySystemLibrary::GetOverlayWidgetController(
 UAttributeMenuWidgetController* UMiniAbilitySystemLibrary::GetAttributeMenuWidgetController(
 	const UObject* WorldContextObject)
 {
-	if (APlayerController* PC = UGameplayStatics::GetPlayerController(WorldContextObject, 0))
+	FWidgetControllerParams WCParams;
+	AMiniHUD* MiniHUD = nullptr;
+	if (MakeWidgetControllerParams(WorldContextObject, WCParams, MiniHUD))
 	{
-		if (AMiniHUD* MiniHUD = Cast<AMiniHUD>(PC->GetHUD()))
-		{
-			AMiniPlayerState* PS = PC->GetPlayerState<AMiniPlayerState>();
-			UAbilitySystemComponent* ASC = PS->GetAbilitySystemComponent();
-			UAttributeSet* AS = PS->GetAttributeSet();
-			const FWidgetControllerParams WidgetControllerParams(PC, PS, ASC, AS);
-			return MiniHUD->GetAttributeMenuWidgetController(WidgetControllerParams);
-		}
+		return MiniHUD->GetAttributeMenuWidgetController(WCParams);
+	}
+	return nullptr;
+}
+
+USkillMenuWidgetController* UMiniAbilitySystemLibrary::GetSkillMenuWidgetController(const UObject* WorldContextObject)
+{
+	FWidgetControllerParams WCParams;
+	AMiniHUD* MiniHUD = nullptr;
+	if (MakeWidgetControllerParams(WorldContextObject, WCParams, MiniHUD))
+	{
+		return MiniHUD->GetSkillMenuWidgetController(WCParams);
 	}
 	return nullptr;
 }
