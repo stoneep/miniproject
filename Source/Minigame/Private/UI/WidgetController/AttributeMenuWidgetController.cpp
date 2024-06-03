@@ -11,9 +11,8 @@
 
 void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 {
-	UMiniAttributeSet* AS = CastChecked<UMiniAttributeSet>(AttributeSet);
 	check(AttributeInfo);
-	for (auto& Pair : AS->TagsToAttributes)
+	for (auto& Pair : GetMiniAS()->TagsToAttributes)
 	{
 			AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Value()).AddLambda(
 		[this, Pair](const FOnAttributeChangeData& Data)
@@ -22,8 +21,7 @@ void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 			}
 		);
 	}
-	AMiniPlayerState* MiniPlayerState = CastChecked<AMiniPlayerState>(PlayerState);
-	MiniPlayerState->OnAttributePointsChangedDelegate.AddLambda(
+	GetMiniPS()->OnAttributePointsChangedDelegate.AddLambda(
 		[this](int32 Points)
 		{
 			AttributePointsChangedDelegate.Broadcast(Points);
@@ -34,16 +32,13 @@ void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 void UAttributeMenuWidgetController::BroadcastInitialValues()
 {
 	UMiniAttributeSet* AS = CastChecked<UMiniAttributeSet>(AttributeSet);
-
 	check(AttributeInfo);
-
 	for (auto& Pair : AS->TagsToAttributes)
 	{
 		BroadcastAttributeInfo(Pair.Key, Pair.Value());
-
-		AMiniPlayerState* MiniPlayerState = CastChecked<AMiniPlayerState>(PlayerState);
-		AttributePointsChangedDelegate.Broadcast(MiniPlayerState->GetAttributePoints());
 	}
+
+	AttributePointsChangedDelegate.Broadcast(GetMiniPS()->GetAttributePoints());
 }
 
 void UAttributeMenuWidgetController::UpgradeAttribute(const FGameplayTag& AttributeTag)

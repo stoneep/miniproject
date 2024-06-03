@@ -10,62 +10,64 @@
 
 void UOverlayWidgetController::BroadcastInitialValues()
 {
-	const UMiniAttributeSet* MiniAttributeSet = CastChecked<UMiniAttributeSet>(AttributeSet);
+	//const UMiniAttributeSet* MiniAttributeSet = CastChecked<UMiniAttributeSet>(AttributeSet);
 
-	OnHealthChanged.Broadcast(MiniAttributeSet->GetHealth());
-	OnMaxHealthChanged.Broadcast(MiniAttributeSet->GetMaxHealth());
-	OnManaChanged.Broadcast(MiniAttributeSet->GetMana());
-	OnMaxManaChanged.Broadcast(MiniAttributeSet->GetMaxMana());
+	OnHealthChanged.Broadcast(GetMiniAS()->GetHealth());
+	OnMaxHealthChanged.Broadcast(GetMiniAS()->GetMaxHealth());
+	OnManaChanged.Broadcast(GetMiniAS()->GetMana());
+	OnMaxManaChanged.Broadcast(GetMiniAS()->GetMaxMana());
 }
 
 void UOverlayWidgetController::BindCallbacksToDependencies()
 {
-	AMiniPlayerState* MiniPlayerState = CastChecked<AMiniPlayerState>(PlayerState);
-	MiniPlayerState->OnLevelChangedDelegate.AddUObject(this, &UOverlayWidgetController::OnXPChanged);
-	MiniPlayerState->OnLevelChangedDelegate.AddLambda([this](int32 NewLevel){OnPlayerLevelChangedDelegate.Broadcast(NewLevel);});
+	GetMiniPS()->OnXPChangedDelegate.AddUObject(this, &UOverlayWidgetController::OnXPChanged);
+	GetMiniPS()->OnLevelChangedDelegate.AddLambda(
+		[this](int32 NewLevel)
+		{
+			OnPlayerLevelChangedDelegate.Broadcast(NewLevel);
+		}
+	);
 	
-	const UMiniAttributeSet* MiniAttributeSet = CastChecked<UMiniAttributeSet>(AttributeSet);
-	
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(MiniAttributeSet->GetHealthAttribute()).AddLambda(
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GetMiniAS()->GetHealthAttribute()).AddLambda(
 			[this](const FOnAttributeChangeData& Data)
 			{
 				OnHealthChanged.Broadcast(Data.NewValue);
 			}
 		);
 
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(MiniAttributeSet->GetMaxHealthAttribute()).AddLambda(
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GetMiniAS()->GetMaxHealthAttribute()).AddLambda(
 			[this](const FOnAttributeChangeData& Data)
 			{
 				OnMaxHealthChanged.Broadcast(Data.NewValue);
 			}
 		);
 
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(MiniAttributeSet->GetManaAttribute()).AddLambda(
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GetMiniAS()->GetManaAttribute()).AddLambda(
 			[this](const FOnAttributeChangeData& Data)
 			{
 				OnManaChanged.Broadcast(Data.NewValue);
 			}
 		);
 
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(MiniAttributeSet->GetMaxManaAttribute()).AddLambda(
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GetMiniAS()->GetMaxManaAttribute()).AddLambda(
 			[this](const FOnAttributeChangeData& Data)
 			{
 				OnMaxManaChanged.Broadcast(Data.NewValue);
 			}
 		);
 	
-	if (UMiniAbilitySystemComponent* MiniASC = Cast<UMiniAbilitySystemComponent>(AbilitySystemComponent))
+	if (GetMiniASC())
 	{
-		if(MiniASC->bStartupAbilitiesGiven)
+		if(GetMiniASC()->bStartupAbilitiesGiven)
 		{
-			OnInitializeStartupAbilities(MiniASC);
+			BroadcastAbilityInfo();
 		}
 		else
 		{
-			MiniASC->AbilitiesGivenDelegate.AddUObject(this, &UOverlayWidgetController::OnInitializeStartupAbilities);
+			GetMiniASC()->AbilitiesGivenDelegate.AddUObject(this, &UOverlayWidgetController::BroadcastAbilityInfo);
 		}
 		
-		MiniASC->EffectAssetTags.AddLambda(
+		GetMiniASC()->EffectAssetTags.AddLambda(
 		[this](const FGameplayTagContainer& AssetTags)
 			{
 				for (const FGameplayTag& Tag : AssetTags)
@@ -86,24 +88,25 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 	
 }
 
-void UOverlayWidgetController::OnInitializeStartupAbilities(UMiniAbilitySystemComponent* MiniAbilitySystemComponent)
-{
-	if(!MiniAbilitySystemComponent->bStartupAbilitiesGiven) return;
-	
-	FForEachAbility BroadcastDelegate;
-	BroadcastDelegate.BindLambda([this, MiniAbilitySystemComponent](const FGameplayAbilitySpec& AbilitySpec)
-	{
-		FMiniAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(MiniAbilitySystemComponent->GetAbilityTagFromSpec(AbilitySpec));
-		Info.InputTag = MiniAbilitySystemComponent->GetInputTagFromSpec(AbilitySpec);
-		AbilityInfoDelegate.Broadcast(Info);
-	});
-	MiniAbilitySystemComponent->ForEachAbility(BroadcastDelegate);
-}
+// void UOverlayWidgetController::OnInitializeStartupAbilities(UMiniAbilitySystemComponent* MiniAbilitySystemComponent)
+// {
+// 	if (!MiniAbilitySystemComponent->bStartupAbilitiesGiven) return;
+//
+// 	FForEachAbility BroadcastDelegate;
+// 	BroadcastDelegate.BindLambda([this, MiniAbilitySystemComponent](const FGameplayAbilitySpec& AbilitySpec)
+// 	{
+// 		FMiniAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(MiniAbilitySystemComponent->GetAbilityTagFromSpec(AbilitySpec));
+// 		Info.InputTag = MiniAbilitySystemComponent->GetInputTagFromSpec(AbilitySpec);
+// 		AbilityInfoDelegate.Broadcast(Info);
+// 	});
+// 	MiniAbilitySystemComponent->ForEachAbility(BroadcastDelegate);
+// }
 
-void UOverlayWidgetController::OnXPChanged(int32 NewXP) const
+void UOverlayWidgetController::OnXPChanged(int32 NewXP)
 {
-	const AMiniPlayerState* MiniPlayerState = CastChecked<AMiniPlayerState>(PlayerState);
-	const ULevelUpInfo* LevelUpInfo = MiniPlayerState->LevelUpInfo;
+	//const AMiniPlayerState* MiniPlayerState = CastChecked<AMiniPlayerState>(PlayerState);
+	//const ULevelUpInfo* LevelUpInfo = MiniPlayerState->LevelUpInfo;
+	const ULevelUpInfo* LevelUpInfo = GetMiniPS()->LevelUpInfo;
 	checkf(LevelUpInfo, TEXT("Unabled to find LevelUpInfo. Please fill out MiniPlayerState Blueprint"));
 
 	const int32 Level = LevelUpInfo->FindLevelForXP(NewXP);

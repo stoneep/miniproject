@@ -8,9 +8,17 @@
 #include "MiniWidgetController.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerStatChangedSignature, int32, NewValue);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAbilityInfoSignature, const FMiniAbilityInfo&, Info);
 
 class UAttributeSet;
 class UAbilitySystemComponent;
+class AMiniPlayerController;
+class AMiniPlayerState;
+class UMiniAbilitySystemComponent;
+class UMiniAttributeSet;
+class UAbilityInfo;
+
+
 
 USTRUCT(BlueprintType)
 struct FWidgetControllerParams
@@ -46,10 +54,17 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	virtual void BroadcastInitialValues();
-	
 	virtual void BindCallbacksToDependencies();
-protected:
 
+	UPROPERTY(BlueprintAssignable, Category="Mini|Messages")
+	FAbilityInfoSignature AbilityInfoDelegate;
+
+	void BroadcastAbilityInfo();
+	
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Widget Data")
+	TObjectPtr<UAbilityInfo> AbilityInfo;
+	
 	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
 	TObjectPtr<APlayerController> PlayerController;
 
@@ -61,4 +76,21 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
 	TObjectPtr<UAttributeSet> AttributeSet;
+	
+	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
+	TObjectPtr<AMiniPlayerController> MiniPlayerController;
+
+	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
+	TObjectPtr<AMiniPlayerState> MiniPlayerState;
+
+	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
+	TObjectPtr<UMiniAbilitySystemComponent> MiniAbilitySystemComponent;
+
+	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
+	TObjectPtr<UMiniAttributeSet> MiniAttributeSet;
+	
+	AMiniPlayerController* GetMiniPC();
+	AMiniPlayerState* GetMiniPS();
+	UMiniAbilitySystemComponent* GetMiniASC();
+	UMiniAttributeSet* GetMiniAS();
 };
