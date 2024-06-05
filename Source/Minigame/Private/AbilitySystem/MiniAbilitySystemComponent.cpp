@@ -3,9 +3,11 @@
 
 #include "AbilitySystem/MiniAbilitySystemComponent.h"
 
-//#include "MiniGameplayTags.h"
+#include "MiniGameplayTags.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystem/MiniAbilitySystemLibrary.h"
 #include "AbilitySystem/Abilities/MiniGameplayAbility.h"
+#include "AbilitySystem/Data/AbilityInfo.h"
 #include "Minigame/MiniLogChannels.h"
 #include "Interaction/PlayerInterface.h"
 
@@ -22,6 +24,7 @@ void UMiniAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf
 		if (const UMiniGameplayAbility* MiniAbility = Cast<UMiniGameplayAbility>(AbilitySpec.Ability))
 		{
 			AbilitySpec.DynamicAbilityTags.AddTag(MiniAbility->StartupInputTag);
+			AbilitySpec.DynamicAbilityTags.AddTag(FMiniGameplayTags::Get().Abilities_Status_Equipped);
 			GiveAbility(AbilitySpec);
 		}
 	}
@@ -106,6 +109,53 @@ FGameplayTag UMiniAbilitySystemComponent::GetInputTagFromSpec(const FGameplayAbi
 	return FGameplayTag();
 }
 
+FGameplayTag UMiniAbilitySystemComponent::GetStatusFromSpec(const FGameplayAbilitySpec& AbilitySpec)
+{
+	for (FGameplayTag StatusTag : AbilitySpec.DynamicAbilityTags)
+	{
+		if (StatusTag.MatchesTag(FGameplayTag::RequestGameplayTag(FName("Abilities.Status"))))
+		{
+			return StatusTag;
+		}
+	}
+	return FGameplayTag();
+}
+
+FGameplayAbilitySpec* UMiniAbilitySystemComponent::GetSpecFromAbilityTag(const FGameplayTag& AbilityTag)
+{
+	FScopedAbilityListLock ActiveScopeLoc(*this);
+	for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	{
+		for (FGameplayTag Tag : AbilitySpec.Ability.Get()->AbilityTags)
+		{
+			if (Tag.MatchesTag(AbilityTag))
+			{
+				return &AbilitySpec;
+			}
+		}
+	}
+	return nullptr;
+}
+
+void UMiniAbilitySystemComponent::UpdateAbilityStatuses(int32 Level)
+{
+	UAbilityInfo* AbilityInfo = UMiniAbilitySystemLibrary::GetAbilityInfo(GetAvatarActor());
+	for (const FMiniAbilityInfo& Info : AbilityInfo->AbilityInformation)
+	{
+		if (!Info.AbilityTag.IsValid()) continue;
+		if (Level < Info.LevelRequirement) continue;
+		if (GetSpecFromAbilityTag(Info.AbilityTag) == nullptr)
+		{
+			FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(Info.Ability, 1);
+			AbilitySpec.DynamicAbilityTags.AddTag(FMiniGameplayTags::Get().Abilities_Status_Eligible);
+			GiveAbility(AbilitySpec);
+			MarkAbilitySpecDirty(AbilitySpec);
+
+			ClientUpdateAbilityStatus(Info.AbilityTag,FMiniGameplayTags::Get().Abilities_Status_Eligible);
+		}
+	}
+}
+
 void UMiniAbilitySystemComponent::UpgradeAttribute(const FGameplayTag& AttributeTag)
 {
 	if (GetAvatarActor()->Implements<UPlayerInterface>())
@@ -140,6 +190,12 @@ void UMiniAbilitySystemComponent::OnRep_ActivateAbilities()
 		bStartupAbilitiesGiven = true;
 		AbilitiesGivenDelegate.Broadcast();
 	}
+}
+
+void UMiniAbilitySystemComponent::ClientUpdateAbilityStatus_Implementation(const FGameplayTag& AbilityTag,
+	const FGameplayTag& StatusTag)
+{
+	AbilityStatusChanged.Broadcast(AbilityTag, StatusTag);
 }
 
 void UMiniAbilitySystemComponent::ClientEffectApplied_Implementation(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle)

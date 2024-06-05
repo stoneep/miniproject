@@ -7,6 +7,7 @@
 #include "MiniGameModeBase.generated.h"
 
 class UCharacterClassInfo;
+class UAbilityInfo;
 /**
  * 
  */
@@ -18,4 +19,7 @@ class MINIGAME_API AMiniGameModeBase : public AGameModeBase
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Character Class Defaults")
 	TObjectPtr<UCharacterClassInfo> CharacterClassInfo;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Ability Info")
+	TObjectPtr<UAbilityInfo> AbilityInfo;
 };

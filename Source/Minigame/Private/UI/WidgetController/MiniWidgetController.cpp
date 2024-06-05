@@ -34,6 +34,7 @@ void UMiniWidgetController::BroadcastAbilityInfo()
 	{
 		FMiniAbilityInfo Info = AbilityInfo->FindAbilityInfoForTag(MiniAbilitySystemComponent->GetAbilityTagFromSpec(AbilitySpec));
 		Info.InputTag = MiniAbilitySystemComponent->GetInputTagFromSpec(AbilitySpec);
+		Info.StatusTag = MiniAbilitySystemComponent->GetStatusFromSpec(AbilitySpec);
 		AbilityInfoDelegate.Broadcast(Info);
 	});
 	GetMiniASC()->ForEachAbility(BroadcastDelegate);

@@ -124,9 +124,16 @@ int32 UMiniAbilitySystemLibrary::GetXPRewardForClassAndLevel(const UObject* Worl
 
 UCharacterClassInfo* UMiniAbilitySystemLibrary::GetCharacterClassInfo(const UObject* WorldContextObject)
 {
-	AMiniGameModeBase* MiniGameMode = Cast<AMiniGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
+	const AMiniGameModeBase* MiniGameMode = Cast<AMiniGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
 	if (MiniGameMode == nullptr) return nullptr;
 	return MiniGameMode->CharacterClassInfo;
+}
+
+UAbilityInfo* UMiniAbilitySystemLibrary::GetAbilityInfo(const UObject* WorldContextObject)
+{
+	const AMiniGameModeBase* MiniGameMode = Cast<AMiniGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
+	if (MiniGameMode == nullptr) return nullptr;
+	return MiniGameMode->AbilityInfo;
 }
 
 bool UMiniAbilitySystemLibrary::IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle)

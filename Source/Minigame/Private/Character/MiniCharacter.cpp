@@ -136,6 +136,11 @@ void AMiniCharacter::AddToPlayerLevel_Implementation(int32 InPlayerLevel)
 	AMiniPlayerState* MiniPlayerState = GetPlayerState<AMiniPlayerState>();
 	check(MiniPlayerState);
 	MiniPlayerState->AddToLevel(InPlayerLevel);
+
+	if (UMiniAbilitySystemComponent* MiniASC = Cast<UMiniAbilitySystemComponent>(GetAbilitySystemComponent()))
+	{
+		MiniASC->UpdateAbilityStatuses(MiniPlayerState->GetPlayerLevel());
+	}
 }
 
 void AMiniCharacter::AddToAttributePoints_Implementation(int32 InAttributePoints)

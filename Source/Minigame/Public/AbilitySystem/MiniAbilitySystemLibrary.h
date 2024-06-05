@@ -7,6 +7,7 @@
 #include "Data/CharacterClassInfo.h"
 #include "MiniAbilitySystemLibrary.generated.h"
 
+class UAbilityInfo;
 class USkillMenuWidgetController;
 class UAbilitySystemComponent;
 class UAttributeMenuWidgetController;
@@ -23,7 +24,7 @@ class MINIGAME_API UMiniAbilitySystemLibrary : public UBlueprintFunctionLibrary
 public:
 
 	UFUNCTION(BlueprintPure, Category="MiniAbilitySystemLibrary|WidgetController", meta = (DefaultToSelf = "WorldContextObject"))
-	static bool MakeWidgetControllerParams(const UObject* WorldContextObject, FWidgetControllerParams& OutWCParams, AMiniHUD*& OutAuraHUD);
+	static bool MakeWidgetControllerParams(const UObject* WorldContextObject, FWidgetControllerParams& OutWCParams, AMiniHUD*& OutMiniHUD);
 
 	UFUNCTION(BlueprintPure, Category="MiniAbilitySystemLibrary|WidgetController", meta = (DefaultToSelf = "WorldContextObject"))
 	static UOverlayWidgetController* GetOverlayWidgetController(const UObject* WorldContextObject);
@@ -43,6 +44,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category="MiniAbilitySystemLibrary|CharacterClassDefaults")
 	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContextObject);
 
+	UFUNCTION(BlueprintCallable, Category="MiniAbilitySystemLibrary|CharacterClassDefaults")
+	static UAbilityInfo* GetAbilityInfo(const UObject* WorldContextObject);
+	
 	UFUNCTION(BlueprintPure, Category="MiniAbilitySystemLibrary|GameplayEffects")
 	static bool IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle);
 
