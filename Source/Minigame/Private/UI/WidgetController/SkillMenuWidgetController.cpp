@@ -14,7 +14,7 @@ void USkillMenuWidgetController::BroadcastInitialValues()
 
 void USkillMenuWidgetController::BindCallbacksToDependencies()
 {
-	GetMiniASC()->AbilityStatusChanged.AddLambda([this](const FGameplayTag& AbilityTag, const FGameplayTag& StatusTag)
+	GetMiniASC()->AbilityStatusChanged.AddLambda([this](const FGameplayTag& AbilityTag, const FGameplayTag& StatusTag, int32 NewLevel)
 	{
 		if (SelectedAbility.Ability.MatchesTagExact(AbilityTag))
 		{
@@ -22,7 +22,10 @@ void USkillMenuWidgetController::BindCallbacksToDependencies()
 			bool bEnableSpendPoints = false;
 			bool bEnableEquip = false;
 			ShouldEnableButtons(StatusTag, CurrentSkillPoints, bEnableSpendPoints, bEnableEquip);
-			SkillSelectedDelegate.Broadcast(bEnableSpendPoints, bEnableEquip);
+			FString Description;
+			FString NextLevelDescription;
+			GetMiniASC()->GetDescriptionsByAbilityTag(AbilityTag, Description, NextLevelDescription);
+			SkillSelectedDelegate.Broadcast(bEnableSpendPoints, bEnableEquip, Description, NextLevelDescription);
 		}
 		if (AbilityInfo)
 		{
@@ -40,7 +43,10 @@ void USkillMenuWidgetController::BindCallbacksToDependencies()
 		bool bEnableSpendPoints = false;
 		bool bEnableEquip = false;
 		ShouldEnableButtons(SelectedAbility.Status, CurrentSkillPoints, bEnableSpendPoints, bEnableEquip);
-		SkillSelectedDelegate.Broadcast(bEnableSpendPoints, bEnableEquip);
+		FString Description;
+		FString NextLevelDescription;
+		GetMiniASC()->GetDescriptionsByAbilityTag(SelectedAbility.Ability, Description, NextLevelDescription);
+		SkillSelectedDelegate.Broadcast(bEnableSpendPoints, bEnableEquip, Description, NextLevelDescription);
 	}
 	);
 }
@@ -68,11 +74,22 @@ void USkillMenuWidgetController::SkillSelected(const FGameplayTag& AbilityTag)
 	bool bEnableSpendPoints = false;
 	bool bEnableEquip = false;
 	ShouldEnableButtons(AbilityStatus, SkillPoints, bEnableSpendPoints, bEnableEquip);
-	SkillSelectedDelegate.Broadcast(bEnableSpendPoints, bEnableEquip);
+	FString Description;
+	FString NextLevelDescription;
+	GetMiniASC()->GetDescriptionsByAbilityTag(AbilityTag, Description, NextLevelDescription);
+	SkillSelectedDelegate.Broadcast(bEnableSpendPoints, bEnableEquip, Description, NextLevelDescription);
+}
+
+void USkillMenuWidgetController::SpendPointButtonPressed()
+{
+	if (GetMiniASC())
+	{
+		GetMiniASC()->ServerSpendSkillPoint(SelectedAbility.Ability);
+	}
 }
 
 void USkillMenuWidgetController::ShouldEnableButtons(const FGameplayTag& AbilityStatus, int32 SkillPoints,
-	bool& bShouldEnableSkillPointsButton, bool& bShouldEnableEquipButton)
+                                                     bool& bShouldEnableSkillPointsButton, bool& bShouldEnableEquipButton)
 {
 	const FMiniGameplayTags GameplayTags = FMiniGameplayTags::Get();
 
