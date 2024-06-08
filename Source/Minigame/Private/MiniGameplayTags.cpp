@@ -83,13 +83,111 @@ void FMiniGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.InputTag_2 = UGameplayTagsManager::Get().AddNativeGameplayTag(
 			FName("InputTag.2"),
 			FString("Key 2"));
-	GameplayTags.InputTag_LMB = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	GameplayTags.InputTag_3 = UGameplayTagsManager::Get().AddNativeGameplayTag(
 			FName("InputTag.3"),
 			FString("Key 3"));
 	GameplayTags.InputTag_4 = UGameplayTagsManager::Get().AddNativeGameplayTag(
 			FName("InputTag.4"),
 			FString("Key 4"));
-	
+	GameplayTags.InputTag_5 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.5"),
+			FString("Key 5"));
+	GameplayTags.InputTag_6 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.6"),
+			FString("Key 6"));
+	GameplayTags.InputTag_7 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.7"),
+			FString("Key 7"));
+	GameplayTags.InputTag_8 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.8"),
+			FString("Key 8"));
+	GameplayTags.InputTag_9 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.9"),
+			FString("Key 9"));
+	GameplayTags.InputTag_0 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.0"),
+			FString("Key 0"));
+	GameplayTags.InputTag_q = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.q"),
+			FString("Key q"));
+	GameplayTags.InputTag_e = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.e"),
+			FString("Key e"));
+	GameplayTags.InputTag_r = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.r"),
+			FString("Key r"));
+	GameplayTags.InputTag_t = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.t"),
+			FString("Key t"));
+	GameplayTags.InputTag_y = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.y"),
+			FString("Key y"));
+	GameplayTags.InputTag_u = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.u"),
+			FString("Key u"));
+	GameplayTags.InputTag_i = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.i"),
+			FString("Key i"));
+	GameplayTags.InputTag_o = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.o"),
+			FString("Key o"));
+	GameplayTags.InputTag_p = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.p"),
+			FString("Key p"));
+	GameplayTags.InputTag_f = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.f"),
+			FString("Key f"));
+	GameplayTags.InputTag_g = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.g"),
+			FString("Key g"));
+	GameplayTags.InputTag_h = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.h"),
+			FString("Key h"));
+	GameplayTags.InputTag_j = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.j"),
+			FString("Key j"));
+	GameplayTags.InputTag_k = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.k"),
+			FString("Key k"));
+	GameplayTags.InputTag_l = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.l"),
+			FString("Key l"));
+	GameplayTags.InputTag_z = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.z"),
+			FString("Key z"));
+	GameplayTags.InputTag_x = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.x"),
+			FString("Key x"));
+	GameplayTags.InputTag_c = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.c"),
+			FString("Key c"));
+	GameplayTags.InputTag_v = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.v"),
+			FString("Key v"));
+	GameplayTags.InputTag_b = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.b"),
+			FString("Key b"));
+	GameplayTags.InputTag_n = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.n"),
+			FString("Key n"));
+	GameplayTags.InputTag_m = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.m"),
+			FString("Key m"));
+	GameplayTags.InputTag_L_ctrl = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.L_ctrl"),
+			FString("Key L_ctrl"));
+	GameplayTags.InputTag_Shift = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.Shift"),
+			FString("Key Shift"));
+	GameplayTags.InputTag_R_ctrl = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.R_ctrl"),
+			FString("Key R_ctrl"));
+	GameplayTags.InputTag_l_Alt = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.l_Alt"),
+			FString("Key l_Alt"));
+	GameplayTags.InputTag_R_Alt = UGameplayTagsManager::Get().AddNativeGameplayTag(
+			FName("InputTag.R_Alt"),
+			FString("Key R_Alt"));
 	GameplayTags.InputTag_Passive_1 = UGameplayTagsManager::Get().AddNativeGameplayTag(
 			FName("InputTag.Passive.1"),
 			FString("Passive1")
