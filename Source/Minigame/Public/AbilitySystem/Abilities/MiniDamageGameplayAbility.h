@@ -19,7 +19,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void CauseDamage(AActor* TargetActor);
-	
 
 protected:
 	
@@ -28,11 +27,12 @@ protected:
 
 	// UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Damage")
 	// FScalableFloat Damage;
-
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Damage")
 	TMap<FGameplayTag, FScalableFloat> DamageTypes;
 
 	UFUNCTION(BlueprintPure)
 	FTaggedMontage GetRandomTaggedMontageFromArray(const TArray<FTaggedMontage>& TaggedMontages) const;
+
+	float GetDamageByDamageType(float InLevel, const FGameplayTag& DamageType);
 };
